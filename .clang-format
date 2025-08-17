@@ -1,0 +1,29 @@
+# Language and Standard
+Language: Cpp
+Standard: c++20
+BasedOnStyle: LLvm
+
+AlignAfterOpenBracket: DontAlign
+AllowAllArgumentsOnNextLine: true
+# BreakTemplateDeclarations: Yes
+BinPackParameters: OnePerLine
+BreakAfterAttributes: Always
+ColumnLimit: 125
+IndentWidth: 4
+PointerAlignment: Left
+ReflowComments: IndentOnly
+
+BreakBeforeBraces: Linux
+AllowShortEnumsOnASingleLine:  false
+AlignConsecutiveDeclarations:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: false
+  AlignFunctionDeclarations: true
+  AlignFunctionPointers: true
+AlignConsecutiveAssignments:
+  Enabled: true
+  AcrossEmptyLines: false
+AlignConsecutiveMacros: Consecutive
+NamespaceIndentation: All
+PackConstructorInitializers: NextLineOnly
