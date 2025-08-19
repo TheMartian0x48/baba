@@ -1,5 +1,7 @@
 #include "../memory/memory.h"
-#include "ds.h"
+#include "container.h"
+
+#include <stdio.h>
 #include <string.h>
 
 //***** StrBuf Implementation *****
@@ -132,6 +134,70 @@ Str str_buf_strip_prefix_char(StrBuf* str_buf, char ch)
     return result;
 }
 
+bool str_buf_contain_str(const StrBuf* str_buf, Str pattern)
+{
+    fprintf(stderr, "[%s : %d] str_buf_contain_str is not implemented", __FILE__, __LINE__);
+    exit(-1);
+}
+
+bool str_buf_start_with(StrBuf* str_buf, Str pattern)
+{
+    fprintf(stderr, "[%s : %d] str_buf_start_with is not implemented", __FILE__, __LINE__);
+    exit(-1);
+}
+bool str_buf_end_with(StrBuf* str_buf, Str pattern)
+{
+    fprintf(stderr, "[%s : %d] str_buf_end_with is not implemented", __FILE__, __LINE__);
+    exit(-1);
+}
+Str str_buf_strip_prefix(StrBuf* str_buf, Str prefix)
+{
+    fprintf(stderr, "[%s : %d] str_buf_strip_prefix is not implemented", __FILE__, __LINE__);
+    exit(-1);
+}
+Str str_buf_strip_suffix(StrBuf* str_buf, Str suffix)
+{
+    fprintf(stderr, "[%s : %d] str_buf_strip_suffix is not implemented", __FILE__, __LINE__);
+    exit(-1);
+}
+StrBuf str_buf_copy(StrBuf* str_buf)
+{
+    fprintf(stderr, "[%s : %d] str_buf_copy is not implemented", __FILE__, __LINE__);
+    exit(-1);
+}
+
+StrBuf str_buf_copy_arena(Arena* arena, StrBuf str_buf)
+{
+    fprintf(stderr, "[%s : %d] str_buf_copy_arena is not implemented", __FILE__, __LINE__);
+    exit(-1);
+}
+
+Str str_buf_strip_suffix_char(StrBuf* str_buf, char ch)
+{
+    fprintf(stderr, "[%s : %d] str_buf_strip_suffix_char is not implemented", __FILE__, __LINE__);
+    exit(-1);
+}
+Str str_buf_strip(StrBuf* str_buf, Str pattern)
+{
+    fprintf(stderr, "[%s : %d] str_buf_strip is not implemented", __FILE__, __LINE__);
+    exit(-1);
+}
+Str str_buf_strip_char(StrBuf* str_buf, char ch)
+{
+    fprintf(stderr, "[%s : %d] str_buf_strip_char is not implemented", __FILE__, __LINE__);
+    exit(-1);
+}
+
+void str_buf_lowercase(StrBuf* str_buf)
+{
+    fprintf(stderr, "[%s : %d] str_buf_lowercase is not implemented", __FILE__, __LINE__);
+    exit(-1);
+}
+void str_buf_uppercase(StrBuf* str_buf)
+{
+    fprintf(stderr, "[%s : %d] str_buf_uppercase is not implemented", __FILE__, __LINE__);
+    exit(-1);
+}
 //***** Str Implementation *****
 
 inline char* str_buffer(Str str) { return str.buffer->v + str.index; }
@@ -376,4 +442,50 @@ Str str_strip_char(Str str, char ch)
     result.len    = Max(end - start + 1, 0);
 
     return result;
+}
+
+char* str_to_cstr(const Str str)
+{
+    if (str.len == 0) {
+        return nullptr;
+    }
+    char* ptr = malloc(str.len + 1);
+    if (ptr == nullptr) {
+        return nullptr;
+    }
+    const char* buffer = str_buffer(str);
+    mem_copy(ptr, buffer, str.len);
+    ptr[str.len] = '\0';
+    return ptr;
+}
+
+StrBuf* str_parent_buffer(const Str str)
+{
+    if (str.buffer == nullptr) {
+        return nullptr;
+    }
+    return str.buffer;
+}
+
+bool str_contain_str(Str str, Str pattern)
+{
+    fprintf(stderr, "[%s : %d] str_contain_str is not implemented", __FILE__, __LINE__);
+    exit(-1);
+}
+
+StrBuf str_copy_deep(Str str)
+{
+    fprintf(stderr, "[%s : %d] str_copy_deep is not implemented", __FILE__, __LINE__);
+    exit(-1);
+}
+
+StrBuf str_copy_deep_arena(Arena* arena, Str str)
+{
+    fprintf(stderr, "[%s : %d] str_copy_deep_arena is not implemented", __FILE__, __LINE__);
+    exit(-1);
+}
+i64 str_find_char(Str str, char ch)
+{
+    fprintf(stderr, "[%s : %d] str_find_char is not implemented", __FILE__, __LINE__);
+    exit(-1);
 }

@@ -1,5 +1,5 @@
-#ifndef BABA_DS
-#define BABA_DS
+#ifndef BABA_CONTAINER
+#define BABA_CONTAINER
 
 #include "../memory/memory.h"
 #include "../types.h"
@@ -376,56 +376,45 @@ i64    str_buf_cmp_n(const StrBuf* left, const StrBuf* right, u64 n); // compare
 i64    str_buf_find_char(const StrBuf* str_buf, char ch);             // return position of first char , otherwise -1
 i64    str_buf_find_char_reverse(const StrBuf* str_buf, char ch);     // return position of last char, otherwise -1
 bool   str_buf_contain_char(const StrBuf* str_buf, char ch);          // contains ch in str
-// bool   str_buf_contain_str(const StrBuf* str_buf, Str pattern);       // contains pattern in str
-// bool   str_buf_start_with(StrBuf* str_buf, Str pattern);              //
-// bool   str_buf_end_with(StrBuf* str_buf, Str pattern);                //
-Str str_buf_substr(StrBuf* str_buf, u64 index, u64 len); // return substring of length len starting at index
-// Str    str_buf_strip_prefix(StrBuf* str_buf, Str prefix);             // remove prefix from str
-Str str_buf_strip_prefix_char(StrBuf* str_buf, char ch); // removes ch prefix from str
-// Str    str_buf_strip_suffix(StrBuf* str_buf, Str suffix);             // remove suffix from str
-Str str_buf_strip_suffix_char(StrBuf* str_buf, char ch); // removes ch suffix from str
-Str str_buf_strip(StrBuf* str_buf, Str pattern);         // remove prefix and suffix pattern from str
-Str str_buf_strip_char(StrBuf* str_buf, char ch);        // remove prefix and suffix char from str
-// StrBuf str_buf_copy(StrBuf* str_buf);                                 // make a copy of str but in parent arena
-// StrBuf str_buf_copy_arena(Arena* arena, StrBuf str_buf);              // make a copy of str but in given arena
-void str_buf_lowercase(StrBuf* str_buf); // change to lowercase but in parent arena
-void str_buf_uppercase(StrBuf* str_buf); // change to uppercase but in given arena
-// StrBuf str_buf_lowercase_arena(Arena* arena, StrBuf str_buf);         // change to lowercase but in parent arena
-// StrBuf str_buf_uppercase_arena(Arena* arena, StrBuf str_buf);         // change to uppercase but in given arena
+bool   str_buf_contain_str(const StrBuf* str_buf, Str pattern);       // contains pattern in str
+bool   str_buf_start_with(StrBuf* str_buf, Str pattern);              //
+bool   str_buf_end_with(StrBuf* str_buf, Str pattern);                //
+Str    str_buf_substr(StrBuf* str_buf, u64 index, u64 len);           // return substring of length len starting at index
+Str    str_buf_strip_prefix(StrBuf* str_buf, Str prefix);             // remove prefix from str
+Str    str_buf_strip_prefix_char(StrBuf* str_buf, char ch);           // removes ch prefix from str
+Str    str_buf_strip_suffix(StrBuf* str_buf, Str suffix);             // remove suffix from str
+Str    str_buf_strip_suffix_char(StrBuf* str_buf, char ch);           // removes ch suffix from str
+Str    str_buf_strip(StrBuf* str_buf, Str pattern);                   // remove prefix and suffix pattern from str
+Str    str_buf_strip_char(StrBuf* str_buf, char ch);                  // remove prefix and suffix char from str
+StrBuf str_buf_copy(StrBuf* str_buf);                                 // make a copy of str but in parent arena
+StrBuf str_buf_copy_arena(Arena* arena, StrBuf str_buf);              // make a copy of str but in given arena
+void   str_buf_lowercase(StrBuf* str_buf);                            // change to lowercase but in parent arena
+void   str_buf_uppercase(StrBuf* str_buf);                            // change to uppercase but in given arena
 
 //***** Str *****
 
 inline bool str_empty(Str str);
-inline u64  str_len(Str str);        // string length
-inline char str_at(Str str, u64 at); // string length
-
-i64 str_cmp(Str left, Str right);          // compare left and right string
-i64 str_cmp_n(Str left, Str right, u64 n); // compare left and right string upto n chars
-
-i64 str_find_char(Str str, char ch);         // return position of first char , otherwise -1
-i64 str_find_char_reverse(Str str, char ch); // return position of last char, otherwise -1
-
-inline bool str_contain_char(Str str, char ch); // contains ch in str
-// bool   str_contain_str(Str str, Str pattern);      // contains pattern in str
-
-bool str_start_with(Str str, Str pattern); // str start with pattern ?
-bool str_end_with(Str str, Str pattern);   // str end with pattern ?
-
-Str str_substr(Str str, u64 index, u64 len); // return substring of length len starting at index
-Str str_copy(Str str);                       // clone str
-
-Str        str_strip_prefix(Str str, Str prefix);   // remove prefix from str
-Str        str_strip_prefix_char(Str str, char ch); // removes ch prefix from str
-Str        str_strip_suffix(Str str, Str suffix);   // remove suffix from str
-Str        str_strip_suffix_char(Str str, char ch); // removes ch suffix from str
-inline Str str_strip(Str str, Str pattern);         // remove prefix and suffix pattern from str
-Str        str_strip_char(Str str, char ch);        // remove prefix and suffix char from str
-
-// StrBuf str_copy_deep(Str str);                     // make a copy of str but in parent arena
-// StrBuf str_copy_arena(Arena* arena, Str str);      // make a copy of str but in given arena
-// StrBuf str_lowercase(Str str);                     // change to lowercase but in parent arena
-// StrBuf str_uppercase(Str str);                     // change to uppercase but in given arena
-// StrBuf str_lowercase_arena(Arena* arena, Str str); // change to lowercase but in parent arena
-// StrBuf str_uppercase_arena(Arena* arena, Str str); // change to uppercase but in given arena
+inline u64  str_len(Str str);                           // string length
+inline char str_at(Str str, u64 at);                    // string length
+StrBuf*     str_parent_buffer(Str str);                 // return parent buffer of str
+char*       str_to_cstr(Str str);                       // convert str to c string, caller must free the memory
+i64         str_cmp(Str left, Str right);               // compare left and right string
+i64         str_cmp_n(Str left, Str right, u64 n);      // compare left and right string upto n chars
+i64         str_find_char(Str str, char ch);            // return position of first char , otherwise -1
+i64         str_find_char_reverse(Str str, char ch);    // return position of last char, otherwise -1
+inline bool str_contain_char(Str str, char ch);         // contains ch in str
+bool        str_contain_str(Str str, Str pattern);      // contains pattern in str
+bool        str_start_with(Str str, Str pattern);       // str start with pattern ?
+bool        str_end_with(Str str, Str pattern);         // str end with pattern ?
+Str         str_substr(Str str, u64 index, u64 len);    // return substring of length len starting at index
+Str         str_copy(Str str);                          // clone str
+StrBuf      str_copy_deep(Str str);                     // make a copy of underlying str but in parent arena
+StrBuf      str_copy_deep_arena(Arena* arena, Str str); // make a copy of underlying str but in given arena
+Str         str_strip_prefix(Str str, Str prefix);      // remove prefix from str
+Str         str_strip_prefix_char(Str str, char ch);    // removes ch prefix from str
+Str         str_strip_suffix(Str str, Str suffix);      // remove suffix from str
+Str         str_strip_suffix_char(Str str, char ch);    // removes ch suffix from str
+inline Str  str_strip(Str str, Str pattern);            // remove prefix and suffix pattern from str
+Str         str_strip_char(Str str, char ch);           // remove prefix and suffix char from str
 
 #endif
