@@ -2,7 +2,7 @@
 #include <assert.h>
 
 //***** Matrix 2x2 i32 Implementation *****
-void matrix_2x2_i32_identity(Matrix2i32* matrix)
+void matrix_2i32_identity(Matrix2i32* matrix)
 {
     assert(matrix && "matrix cannot be null");
     matrix->x00 = 1;
@@ -11,7 +11,7 @@ void matrix_2x2_i32_identity(Matrix2i32* matrix)
     matrix->x11 = 1;
 }
 
-void matrix_2x2_i32_zero(Matrix2i32* matrix)
+void matrix_2i32_zero(Matrix2i32* matrix)
 {
     assert(matrix && "matrix cannot be null");
     matrix->x00 = 0;
@@ -21,7 +21,8 @@ void matrix_2x2_i32_zero(Matrix2i32* matrix)
 }
 
 //***** Matrix 2x2 f32 Implementation *****
-void matrix_2x2_f32_identity(Matrix2f32* matrix)
+
+void matrix_2f32_identity(Matrix2f32* matrix)
 {
     assert(matrix && "matrix cannot be null");
     matrix->x00 = 1.0f;
@@ -30,7 +31,7 @@ void matrix_2x2_f32_identity(Matrix2f32* matrix)
     matrix->x11 = 1.0f;
 }
 
-void matrix_2x2_f32_zero(Matrix2f32* matrix)
+void matrix_2f32_zero(Matrix2f32* matrix)
 {
     assert(matrix && "matrix cannot be null");
     matrix->x00 = 0.0f;
@@ -40,7 +41,7 @@ void matrix_2x2_f32_zero(Matrix2f32* matrix)
 }
 
 //***** Matrix 3x3 i32 Implementation *****
-void matrix_3x3_i32_identity(Matrix3i32* matrix)
+void matrix_3i32_identity(Matrix3i32* matrix)
 {
     assert(matrix && "matrix cannot be null");
     matrix->x00 = 1;
@@ -53,7 +54,7 @@ void matrix_3x3_i32_identity(Matrix3i32* matrix)
     matrix->x21 = 0;
     matrix->x22 = 1;
 }
-void matrix_3x3_i32_zero(Matrix3i32* matrix)
+void matrix_3i32_zero(Matrix3i32* matrix)
 {
     assert(matrix && "matrix cannot be null");
     matrix->x00 = 0;
@@ -68,7 +69,7 @@ void matrix_3x3_i32_zero(Matrix3i32* matrix)
 }
 
 //***** Matrix 3x3 f32 Implementation *****
-void matrix_3x3_f32_identity(Matrix3i32* matrix)
+void matrix_3f32_identity(Matrix3i32* matrix)
 {
     assert(matrix && "matrix cannot be null");
     matrix->x00 = 1.0f;
@@ -81,7 +82,7 @@ void matrix_3x3_f32_identity(Matrix3i32* matrix)
     matrix->x21 = 0.0f;
     matrix->x22 = 1.0f;
 }
-void matrix_3x3_f32_zero(Matrix3f32* matrix)
+void matrix_3f32_zero(Matrix3f32* matrix)
 {
     assert(matrix && "matrix cannot be null");
     matrix->x00 = 0.0f;
