@@ -8,7 +8,7 @@ AllowAllArgumentsOnNextLine: true
 # BreakTemplateDeclarations: Yes
 BinPackParameters: OnePerLine
 BreakAfterAttributes: Always
-ColumnLimit: 125
+ColumnLimit: 150
 IndentWidth: 4
 PointerAlignment: Left
 ReflowComments: IndentOnly

@@ -12,51 +12,46 @@ StrBuf str_buf_make_aligned(Arena* arena, u64 capacity, u64 alignment)
 {
     StrBuf str_buf = {0};
 
-    str_buf.header.alignment = alignment;
-    str_buf.header.size      = 0;
-    str_buf.header.capacity  = capacity;
-    str_buf.header.arena     = arena;
+    str_buf.header.size     = 0;
+    str_buf.header.capacity = capacity;
 
     char* ptr = arena_alloc(arena, capacity, alignment);
     str_buf.v = ptr;
     return str_buf;
 }
 
-StrBuf str_buf_make_from_cstr(Arena* arena, const char* str)
-{
-    return str_buf_make_aligned_from_cstr(arena, str, DEFAULT_ALIGNMENT);
-}
+StrBuf str_buf_make_from_cstr(Arena* arena, const char* str) { return str_buf_make_aligned_from_cstr(arena, str, DEFAULT_ALIGNMENT); }
 
 StrBuf str_buf_make_aligned_from_cstr(Arena* arena, const char* str, u64 alignment)
 {
     u64    len     = strlen(str);
     StrBuf str_buf = {0};
 
-    str_buf.header.alignment = alignment;
-    str_buf.header.size      = len;
-    str_buf.header.capacity  = len;
-    str_buf.header.arena     = arena;
+    if (len == 0) {
+        return str_buf;
+    }
 
-    char* ptr = arena_alloc(arena, len, alignment);
+    str_buf.header.size     = len - 1;
+    str_buf.header.capacity = len - 1;
+
+    char* ptr = arena_alloc(arena, len - 1, alignment);
     str_buf.v = ptr;
-    mem_copy(ptr, str, len);
+    mem_copy(ptr, str, len - 1);
     return str_buf;
 }
 
-void str_buf_kill(StrBuf* str_buf)
+void str_buf_kill(Arena* arena, StrBuf* str_buf)
 {
     if (str_buf) {
-        str_buf->header.capacity  = 0;
-        str_buf->header.alignment = 0;
-        str_buf->header.size      = 0;
-        str_buf->header.arena     = nullptr;
-        str_buf->v                = nullptr;
+        str_buf->header.capacity = 0;
+        str_buf->header.size     = 0;
+        arena_dealloc(arena, str_buf);
     }
 }
 
 bool str_buf_append(StrBuf* str_buf, const char* str) {}
 
-bool str_buf_append_formatted(StrBuf* str_buf, const char* str, ...);
+bool str_buf_append_formatted(Arena* arena, StrBuf* str_buf, const char* str, ...) {}
 
 bool str_buf_empty(const StrBuf* str_buf) { return str_buf->header.size == 0; }
 
@@ -64,64 +59,59 @@ u64 str_buf_len(const StrBuf* str_buf) { return str_buf->header.size; }
 
 u64 str_buf_capacity(const StrBuf* str_buf) { return str_buf->header.capacity; }
 
-Arena* str_buf_arena(const StrBuf* str_buf) { return str_buf->header.arena; }
-
-char str_buf_at(const StrBuf* str_buf, u64 at) { return str_buf->v[at]; }
-
-//
-i64 str_buf_cmp(const StrBuf* left, const StrBuf* right)
+i64 str_buf_cmp(const StrBuf* left, Str right)
 {
-    u64 len    = Min(left->header.size, right->header.size);
-    u64 result = mem_cmp(left->v, right->v, len);
-    return result == 0 ? Sign(left->header.size, right->header.size) : result;
+    u64 len    = Min(left->header.size, right.len);
+    u64 result = mem_cmp(left->v, right.buffer, len);
+    return result == 0 ? Sign(left->header.size, right.len) : result;
 }
 
-i64 str_buf_cmp_n(const StrBuf* left, const StrBuf* right, u64 n)
+i64 str_buf_cmp_n(const StrBuf* left, Str right, u64 n)
 {
-    u64 len = Min(n, Min(left->header.size, right->header.size));
-    return mem_cmp(left->v, right->v, len);
+    u64 len = Min(n, Min(left->header.size, right.len));
+    return mem_cmp(left->v, right.buffer, len);
 }
 
 i64 str_buf_find_char(const StrBuf* str_buf, char ch)
 {
-    u64         len = str_buf->header.size;
-    const char* buf = str_buf->v;
-    for (u64 i = 0; i < len; i++) {
-        if (ch == buf[i])
-            return i;
+    char* start = str_buf->v;
+    if (start == nullptr) {
+        return -1;
     }
-    return -1;
+    char* end = start + str_buf->header.size;
+    while (start < end && *start != ch) {
+        start++;
+    }
+
+    return start == end ? start - str_buf->v : -1;
 }
 
 i64 str_buf_find_char_reverse(const StrBuf* str_buf, char ch)
 {
-    u64         len = str_buf->header.size;
-    const char* buf = str_buf->v;
-    for (i64 i = len - 1; i >= 0; i--) {
-        if (ch == buf[i])
-            return i;
-    }
-    return -1;
+    char* start = str_buf->v;
+    char* end   = start + str_buf->header.size - 1;
+
+    while (start <= end && *end != ch)
+        end--;
+
+    return start == end ? end - start : -1;
 }
 
 bool str_buf_contain_char(const StrBuf* str_buf, char ch) { return str_buf_find_char(str_buf, ch) > -1; }
 
-Str str_buf_substr(StrBuf* str_buf, u64 index, u64 len)
+Str str_buf_substr(const StrBuf* str_buf, u64 index, u64 len)
 {
-    Str str    = {0};
-    str.buffer = str_buf;
+    Str str = {0};
     if (index >= str_buf->header.size) {
-        str.index = 0;
-        str.len   = 0;
         return str;
     }
-    len       = Min(len, str_buf->header.size - index);
-    str.index = index;
-    str.len   = len;
+    len        = Min(len, str_buf->header.size - index);
+    str.len    = len;
+    str.buffer = str_buf->v + index;
     return str;
 }
 
-Str str_buf_strip_prefix_char(StrBuf* str_buf, char ch)
+Str str_buf_strip_prefix_char(const StrBuf* str_buf, char ch)
 {
     Str result = {0};
 
@@ -131,6 +121,8 @@ Str str_buf_strip_prefix_char(StrBuf* str_buf, char ch)
     while (start < end && *start == ch)
         start++;
 
+    result.buffer = start;
+    result.len    = end - start;
     return result;
 }
 
@@ -140,49 +132,43 @@ bool str_buf_contain_str(const StrBuf* str_buf, Str pattern)
     exit(-1);
 }
 
-bool str_buf_start_with(StrBuf* str_buf, Str pattern)
+bool str_buf_start_with(const StrBuf* str_buf, Str pattern)
 {
     fprintf(stderr, "[%s : %d] str_buf_start_with is not implemented", __FILE__, __LINE__);
     exit(-1);
 }
-bool str_buf_end_with(StrBuf* str_buf, Str pattern)
+bool str_buf_end_with(const StrBuf* str_buf, Str pattern)
 {
     fprintf(stderr, "[%s : %d] str_buf_end_with is not implemented", __FILE__, __LINE__);
     exit(-1);
 }
-Str str_buf_strip_prefix(StrBuf* str_buf, Str prefix)
+Str str_buf_strip_prefix(const StrBuf* str_buf, Str prefix)
 {
     fprintf(stderr, "[%s : %d] str_buf_strip_prefix is not implemented", __FILE__, __LINE__);
     exit(-1);
 }
-Str str_buf_strip_suffix(StrBuf* str_buf, Str suffix)
+Str str_buf_strip_suffix(const StrBuf* str_buf, Str suffix)
 {
     fprintf(stderr, "[%s : %d] str_buf_strip_suffix is not implemented", __FILE__, __LINE__);
     exit(-1);
 }
-StrBuf str_buf_copy(StrBuf* str_buf)
+StrBuf str_buf_copy(Arena* arena, const StrBuf* str_buf)
 {
     fprintf(stderr, "[%s : %d] str_buf_copy is not implemented", __FILE__, __LINE__);
     exit(-1);
 }
 
-StrBuf str_buf_copy_arena(Arena* arena, StrBuf str_buf)
-{
-    fprintf(stderr, "[%s : %d] str_buf_copy_arena is not implemented", __FILE__, __LINE__);
-    exit(-1);
-}
-
-Str str_buf_strip_suffix_char(StrBuf* str_buf, char ch)
+Str str_buf_strip_suffix_char(const StrBuf* str_buf, char ch)
 {
     fprintf(stderr, "[%s : %d] str_buf_strip_suffix_char is not implemented", __FILE__, __LINE__);
     exit(-1);
 }
-Str str_buf_strip(StrBuf* str_buf, Str pattern)
+Str str_buf_strip(const StrBuf* str_buf, Str pattern)
 {
     fprintf(stderr, "[%s : %d] str_buf_strip is not implemented", __FILE__, __LINE__);
     exit(-1);
 }
-Str str_buf_strip_char(StrBuf* str_buf, char ch)
+Str str_buf_strip_char(const StrBuf* str_buf, char ch)
 {
     fprintf(stderr, "[%s : %d] str_buf_strip_char is not implemented", __FILE__, __LINE__);
     exit(-1);
@@ -200,20 +186,18 @@ void str_buf_uppercase(StrBuf* str_buf)
 }
 //***** Str Implementation *****
 
-inline char* str_buffer(Str str) { return str.buffer->v + str.index; }
-
 extern inline bool str_empty(Str str) { return str.len == 0; }
 
 extern inline u64 str_len(Str str) { return str.len; }
 
-extern inline char str_at(Str str, u64 at) { return str.buffer->v[str.index + at]; }
+extern inline char str_at(Str str, u64 at) { return str.buffer[at]; }
 
 i64 str_cmp(Str left, Str right)
 {
     u64 len = Min(left.len, right.len);
 
-    const char* lhs = str_buffer(left);
-    const char* rhs = str_buffer(right);
+    const char* lhs = left.buffer;
+    const char* rhs = right.buffer;
 
     i64 result = mem_cmp(lhs, rhs, len);
     return result ? result : Sign(left.len, right.len);
@@ -223,18 +207,18 @@ i64 str_cmp_n(Str left, Str right, u64 n)
 {
     u64 len = Min(Min(left.len, right.len), n);
 
-    const char* lhs = str_buffer(left);
-    const char* rhs = str_buffer(right);
+    const char* lhs = left.buffer;
+    const char* rhs = right.buffer;
 
     u64 result = mem_cmp(lhs, rhs, len);
 
     return result ? result : Sign(left.len, right.len);
 }
 
-i64 str_find_char_version(Str str, char ch)
+i64 str_find_char(Str str, char ch)
 {
     u64   len    = str.len;
-    char* buffer = str_buffer(str);
+    char* buffer = str.buffer;
     char* start  = buffer;
     char* end    = buffer + len;
 
@@ -248,7 +232,7 @@ i64 str_find_char_version(Str str, char ch)
 i64 str_find_char_reverse(Str str, char ch)
 {
     u64   len    = str.len;
-    char* buffer = str_buffer(str);
+    char* buffer = str.buffer;
     char* start  = buffer;
     char* end    = buffer + len - 1;
 
@@ -270,8 +254,8 @@ bool str_start_with(Str str, Str pattern)
         return false;
     }
 
-    char* buffer  = str_buffer(str);
-    char* pbuffer = str_buffer(pattern);
+    char* buffer  = str.buffer;
+    char* pbuffer = pattern.buffer;
 
     return mem_cmp(buffer, pbuffer, plen) == 0;
 }
@@ -285,25 +269,22 @@ bool str_end_with(Str str, Str pattern)
         return false;
     }
 
-    char* buffer  = str_buffer(str) + (len - plen);
-    char* pbuffer = str_buffer(pattern);
+    char* buffer  = str.buffer + (len - plen);
+    char* pbuffer = pattern.buffer;
 
     return mem_cmp(buffer, pbuffer, plen) == 0;
 }
 
 Str str_substr(Str str, u64 index, u64 len)
 {
-    Str result    = {0};
-    result.buffer = str.buffer;
+    Str result = {0};
 
     if (index >= str.len) {
-        result.len   = 0;
-        result.index = str.index;
         return result;
     }
 
-    result.len   = Min(len, str.len - index);
-    result.index = str.index + index;
+    result.len    = Min(len, str.len - index);
+    result.buffer = str.buffer + index;
 
     return result;
 }
@@ -312,7 +293,6 @@ Str str_copy(Str str)
 {
     Str result    = {0};
     result.buffer = str.buffer;
-    result.index  = str.index;
     result.len    = str.len;
 
     return result;
@@ -326,8 +306,8 @@ Str str_strip_prefix(Str str, Str prefix)
         return str;
     }
 
-    char* buffer  = str_buffer(str);
-    char* pbuffer = str_buffer(prefix);
+    char* buffer  = str.buffer;
+    char* pbuffer = prefix.buffer;
 
     const char* end = buffer + len;
 
@@ -341,17 +321,14 @@ Str str_strip_prefix(Str str, Str prefix)
     }
 
     Str result    = {0};
-    result.buffer = str.buffer;
+    result.buffer = str.buffer + plen;
     result.len    = len - plen;
-    result.index  = str.index + plen;
     return result;
 }
 
 Str str_strip_prefix_char(Str str, char ch)
 {
-    u64 len = str.len;
-
-    char* buffer = str_buffer(str);
+    char* buffer = str.buffer;
     char* start  = buffer;
     char* end    = buffer + str.len;
 
@@ -360,8 +337,7 @@ Str str_strip_prefix_char(Str str, char ch)
     }
 
     Str result    = {0};
-    result.buffer = str.buffer;
-    result.index  = start - buffer;
+    result.buffer = str.buffer + (start - buffer);
     result.len    = end - start;
     return result;
 }
@@ -374,9 +350,9 @@ Str str_strip_suffix(Str str, Str suffix)
         return str;
     }
 
-    char* buffer  = str_buffer(str);
+    char* buffer  = str.buffer;
     char* end     = buffer + len - 1;
-    char* sbuffer = str_buffer(suffix);
+    char* sbuffer = suffix.buffer;
     char* send    = sbuffer + slen - 1;
 
     while (send >= sbuffer && *end == *send) {
@@ -391,15 +367,12 @@ Str str_strip_suffix(Str str, Str suffix)
     Str result    = {0};
     result.buffer = str.buffer;
     result.len    = len - slen;
-    result.index  = str.index;
     return result;
 }
 
 Str str_strip_suffix_char(Str str, char ch)
 {
-    u64 len = str.len;
-
-    char* buffer = str_buffer(str);
+    char* buffer = str.buffer;
     char* start  = buffer;
     char* end    = buffer + str.len - 1;
 
@@ -409,7 +382,6 @@ Str str_strip_suffix_char(Str str, char ch)
 
     Str result    = {0};
     result.buffer = str.buffer;
-    result.index  = str.index;
     result.len    = Max(end - start, 0);
     return result;
 }
@@ -422,9 +394,7 @@ extern inline Str str_strip(Str str, Str pattern)
 
 Str str_strip_char(Str str, char ch)
 {
-    u64 len = str.len;
-
-    char* buffer = str_buffer(str);
+    char* buffer = str.buffer;
     char* start  = buffer;
     char* end    = buffer + str.len - 1;
 
@@ -438,7 +408,6 @@ Str str_strip_char(Str str, char ch)
 
     Str result    = {0};
     result.buffer = str.buffer;
-    result.index  = start - buffer;
     result.len    = Max(end - start + 1, 0);
 
     return result;
@@ -453,18 +422,10 @@ char* str_to_cstr(const Str str)
     if (ptr == nullptr) {
         return nullptr;
     }
-    const char* buffer = str_buffer(str);
+    const char* buffer = str.buffer;
     mem_copy(ptr, buffer, str.len);
     ptr[str.len] = '\0';
     return ptr;
-}
-
-StrBuf* str_parent_buffer(const Str str)
-{
-    if (str.buffer == nullptr) {
-        return nullptr;
-    }
-    return str.buffer;
 }
 
 bool str_contain_str(Str str, Str pattern)
@@ -473,19 +434,8 @@ bool str_contain_str(Str str, Str pattern)
     exit(-1);
 }
 
-StrBuf str_copy_deep(Str str)
+StrBuf str_copy_deep(Arena* arena, Str str)
 {
     fprintf(stderr, "[%s : %d] str_copy_deep is not implemented", __FILE__, __LINE__);
-    exit(-1);
-}
-
-StrBuf str_copy_deep_arena(Arena* arena, Str str)
-{
-    fprintf(stderr, "[%s : %d] str_copy_deep_arena is not implemented", __FILE__, __LINE__);
-    exit(-1);
-}
-i64 str_find_char(Str str, char ch)
-{
-    fprintf(stderr, "[%s : %d] str_find_char is not implemented", __FILE__, __LINE__);
     exit(-1);
 }
