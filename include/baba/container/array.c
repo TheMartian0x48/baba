@@ -101,68 +101,65 @@ void array_remove(ArrayHeader* header, void** array, u64 item_size, u64 index)
 
 //***** Macro Implementation for primitive types *****
 
-#define PrimitiveArrayMakeAligned(STRUCT_NAME, TYPE_NAME)                                                                   \
-    assert(arena && "arena cannot be null");                                                                                \
-    STRUCT_NAME result = {0};                                                                                               \
-    void*       ptr    = arena_alloc(arena, sizeof(TYPE_NAME) * capacity, alignment);                                       \
-    if (ptr == nullptr) {                                                                                                   \
-        return result;                                                                                                      \
-    }                                                                                                                       \
-    result.header.capacity = capacity;                                                                                      \
-    result.header.size     = 0;                                                                                             \
-    result.v               = ptr;                                                                                           \
+#define PrimitiveArrayMakeAligned(STRUCT_NAME, TYPE_NAME)                                                                                            \
+    assert(arena && "arena cannot be null");                                                                                                         \
+    STRUCT_NAME result = {0};                                                                                                                        \
+    void*       ptr    = arena_alloc(arena, sizeof(TYPE_NAME) * capacity, alignment);                                                                \
+    if (ptr == nullptr) {                                                                                                                            \
+        return result;                                                                                                                               \
+    }                                                                                                                                                \
+    result.header.capacity = capacity;                                                                                                               \
+    result.header.size     = 0;                                                                                                                      \
+    result.v               = ptr;                                                                                                                    \
     return result;
 
-#define PrimitiveArrayKill                                                                                                  \
-    if (array == nullptr)                                                                                                   \
-        return;                                                                                                             \
-    arena_dealloc(arena, array->v);                                                                                         \
-    array->v               = nullptr;                                                                                       \
-    array->header.capacity = 0;                                                                                             \
+#define PrimitiveArrayKill                                                                                                                           \
+    if (array == nullptr)                                                                                                                            \
+        return;                                                                                                                                      \
+    arena_dealloc(arena, array->v);                                                                                                                  \
+    array->v               = nullptr;                                                                                                                \
+    array->header.capacity = 0;                                                                                                                      \
     array->header.size     = 0;
 
-#define PrimitiveArrayAdd(TYPE_NAME)                                                                                        \
-    assert(element && "element cannot be null");                                                                            \
-    assert(array && "array cannot be null");                                                                                \
-    ArrayHeader* header      = &array->header;                                                                              \
+#define PrimitiveArrayAdd(TYPE_NAME)                                                                                                                 \
+    assert(element && "element cannot be null");                                                                                                     \
+    assert(array && "array cannot be null");                                                                                                         \
+    ArrayHeader* header      = &array->header;                                                                                                       \
     array->v[header->size++] = element;
 
-#define PrimitiveArrayCanAdd                                                                                                \
-    assert(array && "array cannot be null");                                                                                \
+#define PrimitiveArrayCanAdd                                                                                                                         \
+    assert(array && "array cannot be null");                                                                                                         \
     return array->header.size < array->header.capacity;
 
-#define PrimitiveArrayClear                                                                                                 \
-    assert(array && "array cannot be null");                                                                                \
+#define PrimitiveArrayClear                                                                                                                          \
+    assert(array && "array cannot be null");                                                                                                         \
     array->header.size = 0;
 
-#define PrimitiveArrayInsert(TYPE_NAME)                                                                                     \
-    assert(element && "element cannot be null");                                                                            \
-    assert(array && "array cannot be null");                                                                                \
-    uptr src  = (uptr)array->v + sizeof(TYPE_NAME) * index;                                                                 \
-    uptr dest = (uptr)array->v + sizeof(TYPE_NAME) * index + sizeof(u8);                                                    \
-    u64  size = sizeof(TYPE_NAME) * (array->header.size - index);                                                           \
-    mem_move((void*)dest, (void*)src, size);                                                                                \
-    array->v[index] = element;                                                                                              \
+#define PrimitiveArrayInsert(TYPE_NAME)                                                                                                              \
+    assert(element && "element cannot be null");                                                                                                     \
+    assert(array && "array cannot be null");                                                                                                         \
+    uptr src  = (uptr)array->v + sizeof(TYPE_NAME) * index;                                                                                          \
+    uptr dest = (uptr)array->v + sizeof(TYPE_NAME) * index + sizeof(u8);                                                                             \
+    u64  size = sizeof(TYPE_NAME) * (array->header.size - index);                                                                                    \
+    mem_move((void*)dest, (void*)src, size);                                                                                                         \
+    array->v[index] = element;                                                                                                                       \
     array->header.size++;
 
-#define PrimitiveArrayCanInsert                                                                                             \
-    assert(array && "array cannot be null");                                                                                \
+#define PrimitiveArrayCanInsert                                                                                                                      \
+    assert(array && "array cannot be null");                                                                                                         \
     return array->header.size < array->header.capacity;
 
-#define PrimitiveArrayRemove(TYPE_NAME)                                                                                     \
-    assert(array && "array cannot be null");                                                                                \
-    void* src  = (void*)((uptr)array->v + (index + 1) * sizeof(TYPE_NAME));                                                 \
-    void* dest = (void*)((uptr)array->v + index * sizeof(TYPE_NAME));                                                       \
-    u64   size = (array->header.size - index - 1) * sizeof(TYPE_NAME);                                                      \
-    mem_move(dest, src, size);                                                                                              \
+#define PrimitiveArrayRemove(TYPE_NAME)                                                                                                              \
+    assert(array && "array cannot be null");                                                                                                         \
+    void* src  = (void*)((uptr)array->v + (index + 1) * sizeof(TYPE_NAME));                                                                          \
+    void* dest = (void*)((uptr)array->v + index * sizeof(TYPE_NAME));                                                                                \
+    u64   size = (array->header.size - index - 1) * sizeof(TYPE_NAME);                                                                               \
+    mem_move(dest, src, size);                                                                                                                       \
     array->header.size--;
 
 //***** U8Array Implementation *****
 
-U8Array u8_array_make_aligned(Arena* arena, const u64 capacity, const u64 alignment)
-{
-    PrimitiveArrayMakeAligned(U8Array, u8);
-}
+U8Array u8_array_make_aligned(Arena* arena, const u64 capacity, const u64 alignment) { PrimitiveArrayMakeAligned(U8Array, u8); }
 U8Array u8_array_make(Arena* arena, const u64 capacity) { return u8_array_make_aligned(arena, capacity, DEFAULT_ALIGNMENT); }
 void    u8_array_kill(Arena* arena, U8Array* array) { PrimitiveArrayKill; }
 void    u8_array_add(U8Array* array, const u8 element) { PrimitiveArrayAdd(u8); }
