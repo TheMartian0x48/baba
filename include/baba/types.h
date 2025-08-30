@@ -100,10 +100,6 @@ i32 _identity_i32(i32 x) { return x; }
 i64 _identity_i64(i64 x) { return x; }
 f32 _identity_f32(f32 x) { return x; }
 f64 _identity_f64(f64 x) { return x; }
-b8  _identity_b8(b8 x) { return x; }
-b16 _identity_b16(b16 x) { return x; }
-b32 _identity_b32(b32 x) { return x; }
-b64 _identity_b64(b64 x) { return x; }
 
 #define Ceil(x)                                                                                                                                      \
     _Generic((x),                                                                                                                                    \
