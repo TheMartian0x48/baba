@@ -19,4 +19,8 @@ add_library(baba STATIC ${BABA_SOURCES})
 
 # Add example subdirectory
 add_subdirectory(example)
+target_include_directories(baba PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
 
