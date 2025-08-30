@@ -90,41 +90,19 @@ typedef enum {
 #define Sign(a, b) (((a) > (b)) - ((a) < (b)))
 #define Abs(x)     ((x) >= 0 ? (x) : -(x))
 
-u8  _identity_u8(u8 x) { return x; }
-u16 _identity_u16(u16 x) { return x; }
-u32 _identity_u32(u32 x) { return x; }
-u64 _identity_u64(u64 x) { return x; }
-i8  _identity_i8(i8 x) { return x; }
-i16 _identity_i16(i16 x) { return x; }
-i32 _identity_i32(i32 x) { return x; }
-i64 _identity_i64(i64 x) { return x; }
-f32 _identity_f32(f32 x) { return x; }
-f64 _identity_f64(f64 x) { return x; }
+/* u8  _identity_u8(u8 x) { return x; } */
+/* u16 _identity_u16(u16 x) { return x; } */
+/* u32 _identity_u32(u32 x) { return x; } */
+/* u64 _identity_u64(u64 x) { return x; } */
+/* i8  _identity_i8(i8 x) { return x; } */
+/* i16 _identity_i16(i16 x) { return x; } */
+/* i32 _identity_i32(i32 x) { return x; } */
+/* i64 _identity_i64(i64 x) { return x; } */
+/* f32 _identity_f32(f32 x) { return x; } */
+/* f64 _identity_f64(f64 x) { return x; } */
 
-#define Ceil(x)                                                                                                                                      \
-    _Generic((x),                                                                                                                                    \
-        f32: ceilf,                                                                                                                                  \
-        f64: ceil,                                                                                                                                   \
-        u8: _identity_u8,                                                                                                                            \
-        u16: _identity_u16,                                                                                                                          \
-        u32: _identity_u32,                                                                                                                          \
-        u64: _identity_u64,                                                                                                                          \
-        i8: _identity_i8,                                                                                                                            \
-        i16: _identity_i16,                                                                                                                          \
-        i32: _identity_i32,                                                                                                                          \
-        i64: _identity_i64)((x))
+#define Ceil(x) _Generic((x), f32: ceilf, f64: ceil, u8: ((x)), u16: ((x)), u32: ((x)), u64: ((x)), i8: ((x)), i16: ((x)), i32: ((x)), i64: ((x)))
 
-#define Floor(x)                                                                                                                                     \
-    _Generic((x),                                                                                                                                    \
-        f32: floorf,                                                                                                                                 \
-        f64: floor,                                                                                                                                  \
-        u8: _identity_u8,                                                                                                                            \
-        u16: _identity_u16,                                                                                                                          \
-        u32: _identity_u32,                                                                                                                          \
-        u64: _identity_u64,                                                                                                                          \
-        i8: _identity_i8,                                                                                                                            \
-        i16: _identity_i16,                                                                                                                          \
-        i32: _identity_i32,                                                                                                                          \
-        i64: _identity_i64)((x))
+#define Floor(x) _Generic((x), f32: floorf, f64: floor, u8: ((x)), u16: ((x)), u32: ((x)), u64: ((x)), i8: ((x)), i16: ((x)), i32: ((x)), i64: ((x)))
 
 #endif
