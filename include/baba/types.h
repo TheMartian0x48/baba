@@ -35,6 +35,34 @@ typedef double f64;
 typedef intptr_t  iptr;
 typedef uintptr_t uptr;
 
+typedef enum {
+    TYPE_U8,
+    TYPE_U16,
+    TYPE_U32,
+    TYPE_U64,
+
+    TYPE_I8,
+    TYPE_I16,
+    TYPE_I32,
+    TYPE_I64,
+
+    TYPE_F32,
+    TYPE_F64,
+
+    TYPE_B8,
+    TYPE_B16,
+    TYPE_B32,
+    TYPE_B64,
+
+    TYPE_UPTR,
+    TYPE_IPTR,
+
+    TYPE_USIZE,
+    TYPE_ISIZE,
+
+    TYPE_PNULPTR,
+} PrimitiveType;
+
 #define _UnsupportedTypeException(x, ...) _Static_assert(0, "Unsupported type at " __FILE__ ":" _STR(__LINE__) " — " __VA_ARGS__)
 
 #define _STR(x) _VAL(x)

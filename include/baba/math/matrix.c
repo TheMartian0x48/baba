@@ -3,13 +3,13 @@
 #include <assert.h>
 
 //***** Matrix 2x2 i32 Implementation *****
-inline Matrix2i32* matrix_2i32_make(Arena* arena) { return (Matrix2i32*)arena_alloc(arena, sizeof(i32) * 4, DEFAULT_ALIGNMENT); }
+inline Matrix2i* matrix2i_make(Arena* arena) { return (Matrix2i*)arena_alloc(arena, sizeof(i32) * 4, DEFAULT_ALIGNMENT); }
 
-inline Matrix2i32* matrix_2i32_make_aligned(Arena* arena, u64 alignment) { return (Matrix2i32*)arena_alloc(arena, sizeof(i32) * 4, alignment); }
+inline Matrix2i* matrix2i_make_aligned(Arena* arena, u64 alignment) { return (Matrix2i*)arena_alloc(arena, sizeof(i32) * 4, alignment); }
 
-inline void matrix_2i32_kill(Arena* arena, Matrix2i32* matrix) { arena_dealloc(arena, matrix); }
+inline void matrix2i_kill(Arena* arena, Matrix2i* matrix) { arena_dealloc(arena, matrix); }
 
-inline void matrix_2i32_identity(Matrix2i32* matrix)
+inline void matrix2i_identity(Matrix2i* matrix)
 {
     assert(matrix && "matrix cannot be null");
     matrix->x00 = 1;
@@ -18,7 +18,7 @@ inline void matrix_2i32_identity(Matrix2i32* matrix)
     matrix->x11 = 1;
 }
 
-inline void matrix_2i32_zero(Matrix2i32* matrix)
+inline void matrix2i_zero(Matrix2i* matrix)
 {
     assert(matrix && "matrix cannot be null");
     matrix->x00 = 0;
@@ -27,7 +27,7 @@ inline void matrix_2i32_zero(Matrix2i32* matrix)
     matrix->x11 = 0;
 }
 
-inline void matrix_2i32_add(Matrix2i32* a, Matrix2i32* b)
+inline void matrix2i_add(Matrix2i* a, Matrix2i* b)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -37,7 +37,7 @@ inline void matrix_2i32_add(Matrix2i32* a, Matrix2i32* b)
     a->x11 += b->x11;
 }
 
-inline void matrix_2i32_subtract(Matrix2i32* a, Matrix2i32* b)
+inline void matrix2i_subtract(Matrix2i* a, Matrix2i* b)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -47,7 +47,7 @@ inline void matrix_2i32_subtract(Matrix2i32* a, Matrix2i32* b)
     a->x11 -= b->x11;
 }
 
-inline void matrix_2i32_scale(Matrix2i32* a, i32 s)
+inline void matrix2i_scale(Matrix2i* a, i32 s)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -57,7 +57,7 @@ inline void matrix_2i32_scale(Matrix2i32* a, i32 s)
     a->x11 *= s;
 }
 
-inline void matrix_2i32_multiply(Matrix2i32* a, Matrix2i32* b, Matrix2i32* result)
+inline void matrix2i_multiply(Matrix2i* a, Matrix2i* b, Matrix2i* result)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -68,7 +68,7 @@ inline void matrix_2i32_multiply(Matrix2i32* a, Matrix2i32* b, Matrix2i32* resul
     result->x11 = a->x10 * b->x00 + a->x11 * b->x10;
 }
 
-inline void matrix_2i32_copy(Matrix2i32* a, Matrix2i32* result)
+inline void matrix2i_copy(Matrix2i* a, Matrix2i* result)
 {
     assert(a && "matrix a cannot be null");
     assert(result && "matrix result cannot be null");
@@ -78,15 +78,22 @@ inline void matrix_2i32_copy(Matrix2i32* a, Matrix2i32* result)
     result->x11 = a->x11;
 }
 
+void matrix2i_print(Matrix2i* a, FILE* stream)
+{
+    assert(a && "matrix a cannot be null");
+    assert(stream && "stream cannot be null");
+    fprintf(stream, "{\n{%d, %d},\n {%d, %d}\n}\n", a->x00, a->x01, a->x10, a->x11);
+}
+
 //***** Matrix 2x2 f32 Implementation *****
 
-inline Matrix2f32* matrix_2f32_make(Arena* arena) { return (Matrix2f32*)arena_alloc(arena, sizeof(f32) * 4, DEFAULT_ALIGNMENT); }
+inline Matrix2f* matrix2f_make(Arena* arena) { return (Matrix2f*)arena_alloc(arena, sizeof(f32) * 4, DEFAULT_ALIGNMENT); }
 
-inline Matrix2f32* matrix_2f32_make_aligned(Arena* arena, u64 alignment) { return (Matrix2f32*)arena_alloc(arena, sizeof(f32) * 4, alignment); }
+inline Matrix2f* matrix2f_make_aligned(Arena* arena, u64 alignment) { return (Matrix2f*)arena_alloc(arena, sizeof(f32) * 4, alignment); }
 
-inline void matrix_2f32_kill(Arena* arena, Matrix2f32* matrix) { arena_dealloc(arena, matrix); }
+inline void matrix2f_kill(Arena* arena, Matrix2f* matrix) { arena_dealloc(arena, matrix); }
 
-inline void matrix_2f32_identity(Matrix2f32* matrix)
+inline void matrix2f_identity(Matrix2f* matrix)
 {
     assert(matrix && "matrix cannot be null");
     matrix->x00 = 1.0f;
@@ -95,7 +102,7 @@ inline void matrix_2f32_identity(Matrix2f32* matrix)
     matrix->x11 = 1.0f;
 }
 
-inline void matrix_2f32_zero(Matrix2f32* matrix)
+inline void matrix2f_zero(Matrix2f* matrix)
 {
     assert(matrix && "matrix cannot be null");
     matrix->x00 = 0.0f;
@@ -104,7 +111,7 @@ inline void matrix_2f32_zero(Matrix2f32* matrix)
     matrix->x11 = 0.0f;
 }
 
-inline void matrix_2f32_add(Matrix2f32* a, Matrix2f32* b)
+inline void matrix2f_add(Matrix2f* a, Matrix2f* b)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -114,7 +121,7 @@ inline void matrix_2f32_add(Matrix2f32* a, Matrix2f32* b)
     a->x11 += b->x11;
 }
 
-inline void matrix_2f32_subtract(Matrix2f32* a, Matrix2f32* b)
+inline void matrix2f_subtract(Matrix2f* a, Matrix2f* b)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -124,7 +131,7 @@ inline void matrix_2f32_subtract(Matrix2f32* a, Matrix2f32* b)
     a->x11 -= b->x11;
 }
 
-inline void matrix_2f32_scale(Matrix2f32* a, f32 s)
+inline void matrix2f_scale(Matrix2f* a, f32 s)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -134,7 +141,7 @@ inline void matrix_2f32_scale(Matrix2f32* a, f32 s)
     a->x11 *= s;
 }
 
-inline void matrix_2f32_multiply(Matrix2f32* a, Matrix2f32* b, Matrix2f32* result)
+inline void matrix2f_multiply(Matrix2f* a, Matrix2f* b, Matrix2f* result)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -145,7 +152,7 @@ inline void matrix_2f32_multiply(Matrix2f32* a, Matrix2f32* b, Matrix2f32* resul
     result->x11 = a->x10 * b->x00 + a->x11 * b->x10;
 }
 
-inline void matrix_2f32_copy(Matrix2f32* a, Matrix2f32* result)
+inline void matrix2f_copy(Matrix2f* a, Matrix2f* result)
 {
     assert(a && "matrix a cannot be null");
     assert(result && "matrix result cannot be null");
@@ -155,15 +162,22 @@ inline void matrix_2f32_copy(Matrix2f32* a, Matrix2f32* result)
     result->x11 = a->x11;
 }
 
+void matrix2f_print(Matrix2f* a, FILE* stream)
+{
+    assert(a && "matrix a cannot be null");
+    assert(stream && "stream cannot be null");
+    fprintf(stream, "{\n{%10.6f, %10.6f},\n {%10.6f, %10.6f}\n}\n", a->x00, a->x01, a->x10, a->x11);
+}
+
 //***** Matrix 3x3 i32 Implementation *****
 
-inline Matrix3i32* matrix_3i32_make(Arena* arena) { return (Matrix3i32*)arena_alloc(arena, sizeof(i32) * 9, DEFAULT_ALIGNMENT); }
+inline Matrix3i* matrix3i_make(Arena* arena) { return (Matrix3i*)arena_alloc(arena, sizeof(i32) * 9, DEFAULT_ALIGNMENT); }
 
-inline Matrix3i32* matrix_3i32_make_aligned(Arena* arena, u64 alignment) { return (Matrix3i32*)arena_alloc(arena, sizeof(i32) * 9, alignment); }
+inline Matrix3i* matrix3i_make_aligned(Arena* arena, u64 alignment) { return (Matrix3i*)arena_alloc(arena, sizeof(i32) * 9, alignment); }
 
-inline void matrix_3i32_kill(Arena* arena, Matrix3i32* matrix) { arena_dealloc(arena, matrix); }
+inline void matrix3i_kill(Arena* arena, Matrix3i* matrix) { arena_dealloc(arena, matrix); }
 
-inline void matrix_3i32_identity(Matrix3i32* matrix)
+inline void matrix3i_identity(Matrix3i* matrix)
 {
     assert(matrix && "matrix cannot be null");
     matrix->x00 = 1;
@@ -176,7 +190,8 @@ inline void matrix_3i32_identity(Matrix3i32* matrix)
     matrix->x21 = 0;
     matrix->x22 = 1;
 }
-inline void matrix_3i32_zero(Matrix3i32* matrix)
+
+inline void matrix3i_zero(Matrix3i* matrix)
 {
     assert(matrix && "matrix cannot be null");
     matrix->x00 = 0;
@@ -190,7 +205,7 @@ inline void matrix_3i32_zero(Matrix3i32* matrix)
     matrix->x22 = 0;
 }
 
-inline void matrix_3i32_add(Matrix3i32* a, Matrix3i32* b)
+inline void matrix3i_add(Matrix3i* a, Matrix3i* b)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -205,7 +220,7 @@ inline void matrix_3i32_add(Matrix3i32* a, Matrix3i32* b)
     a->x22 += b->x22;
 }
 
-inline void matrix_3i32_subtract(Matrix3i32* a, Matrix3i32* b)
+inline void matrix3i_subtract(Matrix3i* a, Matrix3i* b)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -220,7 +235,7 @@ inline void matrix_3i32_subtract(Matrix3i32* a, Matrix3i32* b)
     a->x22 -= b->x22;
 }
 
-inline void matrix_3i32_scale(Matrix3i32* a, i32 s)
+inline void matrix3i_scale(Matrix3i* a, i32 s)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -235,7 +250,7 @@ inline void matrix_3i32_scale(Matrix3i32* a, i32 s)
     a->x22 *= s;
 }
 
-inline void matrix_3i32_multiply(Matrix3i32* a, Matrix3i32* b, Matrix3i32* result)
+inline void matrix3i_multiply(Matrix3i* a, Matrix3i* b, Matrix3i* result)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -251,7 +266,7 @@ inline void matrix_3i32_multiply(Matrix3i32* a, Matrix3i32* b, Matrix3i32* resul
     result->x22 = a->x20 * b->x02 + a->x21 * b->x12 + a->x22 * b->x22;
 }
 
-inline void matrix_3i32_copy(Matrix3i32* a, Matrix3i32* result)
+inline void matrix3i_copy(Matrix3i* a, Matrix3i* result)
 {
     assert(a && "matrix a cannot be null");
     assert(result && "matrix result cannot be null");
@@ -266,15 +281,22 @@ inline void matrix_3i32_copy(Matrix3i32* a, Matrix3i32* result)
     result->x22 = a->x22;
 }
 
+void matrix3i_print(Matrix3i* a, FILE* stream)
+{
+    assert(a && "matrix a cannot be null");
+    assert(stream && "stream cannot be null");
+    fprintf(stream, "{\n{%d, %d, %d},\n {%d, %d, %d},\n {%d, %d, %d}\n}\n", a->x00, a->x01, a->x02, a->x10, a->x11, a->x12, a->x20, a->x21, a->x22);
+}
+
 //***** Matrix 3x3 f32 Implementation *****
 
-inline Matrix3f32* matrix_3f32_make(Arena* arena) { return (Matrix3f32*)arena_alloc(arena, sizeof(f32) * 9, DEFAULT_ALIGNMENT); }
+inline Matrix3f* matrix3f_make(Arena* arena) { return (Matrix3f*)arena_alloc(arena, sizeof(f32) * 9, DEFAULT_ALIGNMENT); }
 
-inline Matrix3f32* matrix_3f32_make_aligned(Arena* arena, u64 alignment) { return (Matrix3f32*)arena_alloc(arena, sizeof(f32) * 9, alignment); }
+inline Matrix3f* matrix3f_make_aligned(Arena* arena, u64 alignment) { return (Matrix3f*)arena_alloc(arena, sizeof(f32) * 9, alignment); }
 
-inline void matrix_3f32_kill(Arena* arena, Matrix3f32* matrix) { arena_dealloc(arena, matrix); }
+inline void matrix3f_kill(Arena* arena, Matrix3f* matrix) { arena_dealloc(arena, matrix); }
 
-inline void matrix_3f32_identity(Matrix3f32* matrix)
+inline void matrix3f_identity(Matrix3f* matrix)
 {
     assert(matrix && "matrix cannot be null");
     matrix->x00 = 1.0f;
@@ -287,7 +309,7 @@ inline void matrix_3f32_identity(Matrix3f32* matrix)
     matrix->x21 = 0.0f;
     matrix->x22 = 1.0f;
 }
-inline void matrix_3f32_zero(Matrix3f32* matrix)
+inline void matrix3f_zero(Matrix3f* matrix)
 {
     assert(matrix && "matrix cannot be null");
     matrix->x00 = 0.0f;
@@ -301,7 +323,7 @@ inline void matrix_3f32_zero(Matrix3f32* matrix)
     matrix->x22 = 0.0f;
 }
 
-inline void matrix_3f32_add(Matrix3f32* a, Matrix3f32* b)
+inline void matrix3f_add(Matrix3f* a, Matrix3f* b)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -316,7 +338,7 @@ inline void matrix_3f32_add(Matrix3f32* a, Matrix3f32* b)
     a->x22 += b->x22;
 }
 
-inline void matrix_3f32_subtract(Matrix3f32* a, Matrix3f32* b)
+inline void matrix3f_subtract(Matrix3f* a, Matrix3f* b)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -331,7 +353,7 @@ inline void matrix_3f32_subtract(Matrix3f32* a, Matrix3f32* b)
     a->x22 -= b->x22;
 }
 
-inline void matrix_3f32_scale(Matrix3f32* a, f32 s)
+inline void matrix3f_scale(Matrix3f* a, f32 s)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -346,7 +368,7 @@ inline void matrix_3f32_scale(Matrix3f32* a, f32 s)
     a->x22 *= s;
 }
 
-inline void matrix_3f32_multiply(Matrix3f32* a, Matrix3f32* b, Matrix3f32* result)
+inline void matrix3f_multiply(Matrix3f* a, Matrix3f* b, Matrix3f* result)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -362,7 +384,7 @@ inline void matrix_3f32_multiply(Matrix3f32* a, Matrix3f32* b, Matrix3f32* resul
     result->x22 = a->x20 * b->x02 + a->x21 * b->x12 + a->x22 * b->x22;
 }
 
-inline void matrix_3f32_copy(Matrix3f32* a, Matrix3f32* result)
+inline void matrix3f_copy(Matrix3f* a, Matrix3f* result)
 {
     assert(a && "matrix a cannot be null");
     assert(result && "matrix result cannot be null");
@@ -377,15 +399,23 @@ inline void matrix_3f32_copy(Matrix3f32* a, Matrix3f32* result)
     result->x22 = a->x22;
 }
 
+void matrix3f_print(Matrix3f* a, FILE* stream)
+{
+    assert(a && "matrix a cannot be null");
+    assert(stream && "stream cannot be null");
+    fprintf(stream, "{\n{%10.6f, %10.6f, %10.6f},\n {%10.6f, %10.6f, %10.6f},\n {%10.6f, %10.6f, %10.6f}\n}\n", a->x00, a->x01, a->x02, a->x10,
+        a->x11, a->x12, a->x20, a->x21, a->x22);
+}
+
 //***** Matrix 4x4 i32 Implementation *****
 
-inline Matrix4i32* matrix_4i32_make(Arena* arena) { return (Matrix4i32*)arena_alloc(arena, sizeof(i32) * 16, DEFAULT_ALIGNMENT); }
+inline Matrix4i* matrix4i_make(Arena* arena) { return (Matrix4i*)arena_alloc(arena, sizeof(i32) * 16, DEFAULT_ALIGNMENT); }
 
-inline Matrix4i32* matrix_4i32_make_aligned(Arena* arena, u64 alignment) { return (Matrix4i32*)arena_alloc(arena, sizeof(i32) * 16, alignment); }
+inline Matrix4i* matrix4i_make_aligned(Arena* arena, u64 alignment) { return (Matrix4i*)arena_alloc(arena, sizeof(i32) * 16, alignment); }
 
-inline void matrix_4i32_kill(Arena* arena, Matrix4i32* matrix) { arena_dealloc(arena, matrix); }
+inline void matrix4i_kill(Arena* arena, Matrix4i* matrix) { arena_dealloc(arena, matrix); }
 
-inline void matrix_4i32_identity(Matrix4i32* matrix)
+inline void matrix4i_identity(Matrix4i* matrix)
 {
     assert(matrix && "matrix cannot be null");
     matrix->x00 = 1.0;
@@ -406,7 +436,7 @@ inline void matrix_4i32_identity(Matrix4i32* matrix)
     matrix->x33 = 1.0;
 }
 
-inline void matrix_4i32_zero(Matrix4i32* matrix)
+inline void matrix4i_zero(Matrix4i* matrix)
 {
     assert(matrix && "matrix cannot be null");
     matrix->x00 = 0.0;
@@ -427,7 +457,7 @@ inline void matrix_4i32_zero(Matrix4i32* matrix)
     matrix->x33 = 0.0;
 }
 
-inline void matrix_4i32_add(Matrix4i32* a, Matrix4i32* b)
+inline void matrix4i_add(Matrix4i* a, Matrix4i* b)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -449,7 +479,7 @@ inline void matrix_4i32_add(Matrix4i32* a, Matrix4i32* b)
     a->x33 += b->x33;
 }
 
-inline void matrix_4i32_subtract(Matrix4i32* a, Matrix4i32* b)
+inline void matrix4i_subtract(Matrix4i* a, Matrix4i* b)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -471,7 +501,7 @@ inline void matrix_4i32_subtract(Matrix4i32* a, Matrix4i32* b)
     a->x33 -= b->x33;
 }
 
-inline void matrix_4i32_scale(Matrix4i32* a, i32 s)
+inline void matrix4i_scale(Matrix4i* a, i32 s)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -493,7 +523,7 @@ inline void matrix_4i32_scale(Matrix4i32* a, i32 s)
     a->x33 *= s;
 }
 
-inline void matrix_4i32_multiply(Matrix4i32* a, Matrix4i32* b, Matrix4i32* result)
+inline void matrix4i_multiply(Matrix4i* a, Matrix4i* b, Matrix4i* result)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -516,7 +546,7 @@ inline void matrix_4i32_multiply(Matrix4i32* a, Matrix4i32* b, Matrix4i32* resul
     result->x33 = a->x30 * b->x03 + a->x31 * b->x13 + a->x32 * b->x23 + a->x33 * b->x33;
 }
 
-inline void matrix_4i32_copy(Matrix4i32* a, Matrix4i32* result)
+inline void matrix4i_copy(Matrix4i* a, Matrix4i* result)
 {
     assert(a && "matrix a cannot be null");
     assert(result && "matrix result cannot be null");
@@ -538,15 +568,23 @@ inline void matrix_4i32_copy(Matrix4i32* a, Matrix4i32* result)
     result->x33 = a->x33;
 }
 
+void matrix4i_print(Matrix4i* a, FILE* stream)
+{
+    assert(a && "matrix a cannot be null");
+    assert(stream && "stream cannot be null");
+    fprintf(stream, "{\n{%d, %d, %d, %d},\n {%d, %d, %d, %d},\n {%d, %d, %d, %d},\n {%d, %d, %d, %d}\n}\n", a->x00, a->x01, a->x02, a->x03, a->x10,
+        a->x11, a->x12, a->x13, a->x20, a->x21, a->x22, a->x23, a->x30, a->x31, a->x32, a->x33);
+}
+
 //***** Matrix 4x4 f32 Implementation *****
 
-inline Matrix4f32* matrix_4f32_make(Arena* arena) { return (Matrix4f32*)arena_alloc(arena, sizeof(f32) * 16, DEFAULT_ALIGNMENT); }
+inline Matrix4f* matrix4f_make(Arena* arena) { return (Matrix4f*)arena_alloc(arena, sizeof(f32) * 16, DEFAULT_ALIGNMENT); }
 
-inline Matrix4f32* matrix_4f32_make_aligned(Arena* arena, u64 alignment) { return (Matrix4f32*)arena_alloc(arena, sizeof(f32) * 16, alignment); }
+inline Matrix4f* matrix4f_make_aligned(Arena* arena, u64 alignment) { return (Matrix4f*)arena_alloc(arena, sizeof(f32) * 16, alignment); }
 
-inline void matrix_4f32_kill(Arena* arena, Matrix4f32* matrix) { arena_dealloc(arena, matrix); }
+inline void matrix4f_kill(Arena* arena, Matrix4f* matrix) { arena_dealloc(arena, matrix); }
 
-inline void matrix_4f32_identity(Matrix4f32* matrix)
+inline void matrix4f_identity(Matrix4f* matrix)
 {
     assert(matrix && "matrix cannot be null");
     matrix->x00 = 1.0f;
@@ -567,7 +605,7 @@ inline void matrix_4f32_identity(Matrix4f32* matrix)
     matrix->x33 = 1.0f;
 }
 
-inline void matrix_4f32_zero(Matrix4f32* matrix)
+inline void matrix4f_zero(Matrix4f* matrix)
 {
     assert(matrix && "matrix cannot be null");
     matrix->x00 = 0.0f;
@@ -588,7 +626,7 @@ inline void matrix_4f32_zero(Matrix4f32* matrix)
     matrix->x33 = 0.0f;
 }
 
-inline void matrix_4f32_add(Matrix4f32* a, Matrix4f32* b)
+inline void matrix4f_add(Matrix4f* a, Matrix4f* b)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -610,7 +648,7 @@ inline void matrix_4f32_add(Matrix4f32* a, Matrix4f32* b)
     a->x33 += b->x33;
 }
 
-inline void matrix_4f32_subtract(Matrix4f32* a, Matrix4f32* b)
+inline void matrix4f_subtract(Matrix4f* a, Matrix4f* b)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -632,7 +670,7 @@ inline void matrix_4f32_subtract(Matrix4f32* a, Matrix4f32* b)
     a->x33 -= b->x33;
 }
 
-inline void matrix_4f32_scale(Matrix4f32* a, f32 s)
+inline void matrix4f_scale(Matrix4f* a, f32 s)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -654,7 +692,7 @@ inline void matrix_4f32_scale(Matrix4f32* a, f32 s)
     a->x33 *= s;
 }
 
-inline void matrix_4f32_multiply(Matrix4f32* a, Matrix4f32* b, Matrix4f32* result)
+inline void matrix4f_multiply(Matrix4f* a, Matrix4f* b, Matrix4f* result)
 {
     assert(a && "matrix a cannot be null");
     assert(b && "matrix b cannot be null");
@@ -677,7 +715,7 @@ inline void matrix_4f32_multiply(Matrix4f32* a, Matrix4f32* b, Matrix4f32* resul
     result->x33 = a->x30 * b->x03 + a->x31 * b->x13 + a->x32 * b->x23 + a->x33 * b->x33;
 }
 
-inline void matrix_4f32_copy(Matrix4f32* a, Matrix4f32* result)
+inline void matrix4f_copy(Matrix4f* a, Matrix4f* result)
 {
     assert(a && "matrix a cannot be null");
     assert(result && "matrix result cannot be null");
@@ -697,4 +735,45 @@ inline void matrix_4f32_copy(Matrix4f32* a, Matrix4f32* result)
     result->x31 = a->x31;
     result->x32 = a->x32;
     result->x33 = a->x33;
+}
+
+void matrix4f_print(Matrix4f* a, FILE* stream)
+{
+    assert(a && "matrix a cannot be null");
+    assert(stream && "stream cannot be null");
+    fprintf(stream,
+        "{\n{%10.6f, %10.6f, %10.6f, %10.6f},\n {%10.6f, %10.6f, %10.6f, %10.6f},\n {%10.6f, %10.6f, %10.6f, %10.6f},\n {%10.6f, %10.6f, %10.6f, "
+        "%10.6f}\n}\n",
+        a->x00, a->x01, a->x02, a->x03, a->x10, a->x11, a->x12, a->x13, a->x20, a->x21, a->x22, a->x23, a->x30, a->x31, a->x32, a->x33);
+}
+
+void matrix4f_perspective(Matrix4f* m, f32 fov, f32 aspect, f32 near, f32 far)
+{
+    mem_set(m->v, 0, 16);
+    f32 f  = 1.0f / tan_(fov / 2);
+    m->x00 = f / aspect;
+    m->x11 = f;
+    m->x22 = (far + near) / (near - far);
+    m->x23 = 2 * far * near / (near - far);
+    m->x32 = -1;
+}
+
+void matrix4f_orthographic(Matrix4f* m, f32 left, f32 right, f32 bottom, f32 top, f32 near, f32 far)
+{
+    mem_set(m->mat, 0, 16);
+    m->x00 = 2.0 / (right - left);
+    m->x11 = 2.0 / (top - bottom);
+    m->x22 = -2.0 / (far - near);
+    m->x33 = 1;
+
+    m->x03 = -(right + left) / (right - left);
+    m->x13 = -(top + bottom) / (top - bottom);
+    m->x23 = -(far + near) / (far - near);
+}
+
+void matrix4f_translate(Matrix4f* m, f32 x, f32 y, f32 z)
+{
+    m->x03 = x;
+    m->x13 = y;
+    m->x23 = z;
 }

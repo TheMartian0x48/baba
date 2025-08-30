@@ -14,7 +14,7 @@ PointerAlignment: Left
 ReflowComments: IndentOnly
 
 BreakBeforeBraces: Linux
-AllowShortEnumsOnASingleLine:  false
+AllowShortEnumsOnASingleLine: false
 AlignConsecutiveDeclarations:
   Enabled: true
   AcrossEmptyLines: false
