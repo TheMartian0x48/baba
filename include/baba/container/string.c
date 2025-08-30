@@ -49,9 +49,17 @@ void str_buf_kill(Arena* arena, StrBuf* str_buf)
     }
 }
 
-bool str_buf_append(StrBuf* str_buf, const char* str) {}
+bool str_buf_append(StrBuf* str_buf, const char* str)
+{
+    // TODO: implement this function
+    return false;
+}
 
-bool str_buf_append_formatted(Arena* arena, StrBuf* str_buf, const char* str, ...) {}
+bool str_buf_append_formatted(Arena* arena, StrBuf* str_buf, const char* str, ...)
+{
+    // TODO: implement this function
+    return false;
+}
 
 bool str_buf_empty(const StrBuf* str_buf) { return str_buf->header.size == 0; }
 
