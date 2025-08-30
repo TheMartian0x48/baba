@@ -320,9 +320,9 @@ Matrix2i* matrix2i_make_aligned(const Arena* arena, u64 alignment);             
 void      matrix2i_kill(const Arena* arena, Matrix2i* matrix);                       // creates an identity matrix 2x2 of i32
 void      matrix2i_identity(Matrix2i* matrix);                                       // creates an identity matrix 2x2 of i32
 void      matrix2i_zero(Matrix2i* matrix);                                           // creates a zero matrix 2x2 of i32
-void      matrix2i_add(Matrix2i* a, const Matrix2i* b);                              // add matrix b to matrix a
-void      matrix2i_subtract(Matrix2i* a, const Matrix2i* b);                         // subtract matrix b from matrix a
-void      matrix2i_scale(Matrix2i* a, i32 s);                                        // scale matrix a by scaler s
+void      matrix2i_add(const Matrix2i* a, const Matrix2i* b, Matrix2i* result);      // add matrix b to matrix a
+void      matrix2i_subtract(const Matrix2i* a, const Matrix2i* b, Matrix2i* result); // subtract matrix b from matrix a
+void      matrix2i_scale(const Matrix2i* a, i32 s, Matrix2i* result);                // scale matrix a by scaler s
 void      matrix2i_multiply(const Matrix2i* a, const Matrix2i* b, Matrix2i* result); // result = a * b
 void      matrix2i_copy(const Matrix2i* a, Matrix2i* result);                        // copy matrix a
 void      matrix2i_transpose(Matrix2i* a);                                           // transposition of matrix a
@@ -332,11 +332,11 @@ void      matrix2i_print(const Matrix2i* a, FILE* stream);                      
 Matrix2f* matrix2f_make(const Arena* arena);                                         // creates an identity matrix 2x2 of i32
 Matrix2f* matrix2f_make_aligned(const Arena* arena, u64 alignment);                  // creates an identity matrix 2x2 of i32
 void      matrix2f_kill(const Arena* arena, Matrix2f* matrix);                       // creates an identity matrix 2x2 of i32
-void      matrix2f_identity(Matrix2f* matrix);                                       // creates an identity matrix 2x2 of f32
-void      matrix2f_zero(Matrix2f* matrix);                                           // creates a zero matrix 2x2 of f32
-void      matrix2f_add(Matrix2f* a, const Matrix2f* b);                              // add matrix b to matrix a
-void      matrix2f_subtract(Matrix2f* a, const Matrix2f* b);                         // subtract matrix b from matrix a
-void      matrix2f_scale(Matrix2f* a, f32 s);                                        // scale matrix a by scaler s
+void      matrix2f_identity(Matrix2f* result);                                       // creates an identity matrix 2x2 of f32
+void      matrix2f_zero(Matrix2f* result);                                           // creates a zero matrix 2x2 of f32
+void      matrix2f_add(const Matrix2f* a, const Matrix2f* b, Matrix2f* result);      // add matrix b to matrix a
+void      matrix2f_subtract(const Matrix2f* a, const Matrix2f* b, Matrix2f* result); // subtract matrix b from matrix a
+void      matrix2f_scale(const Matrix2f* a, f32 s, Matrix2f* result);                // scale matrix a by scaler s
 void      matrix2f_multiply(const Matrix2f* a, const Matrix2f* b, Matrix2f* result); // result = a * b
 void      matrix2f_copy(const Matrix2f* a, Matrix2f* result);                        // copy matrix a
 void      matrix2f_print(const Matrix2f* a, FILE* stream);                           // print matrix a
@@ -345,11 +345,11 @@ void      matrix2f_print(const Matrix2f* a, FILE* stream);                      
 Matrix3i* matrix3i_make(const Arena* arena);                                         // creates an identity matrix 2x2 of i32
 Matrix3i* matrix3i_make_aligned(const Arena* arena, u64 alignment);                  // creates an identity matrix 2x2 of i32
 void      matrix3i_kill(const Arena* arena, Matrix3i* matrix);                       // creates an identity matrix 2x2 of i32
-void      matrix3i_identity(Matrix3i* matrix);                                       // creates an identity matrix 3x3 of i32
-void      matrix3i_zero(Matrix3i* matrix);                                           // creates a zero matrix 3x3 of i32
-void      matrix3i_add(Matrix3i* a, const Matrix3i* b);                              // add matrix b to matrix a
-void      matrix3i_subtract(Matrix3i* a, const Matrix3i* b);                         // subtract matrix b from matrix a
-void      matrix3i_scale(Matrix3i* a, i32 s);                                        // scale matrix a by scaler s
+void      matrix3i_identity(Matrix3i* result);                                       // creates an identity matrix 3x3 of i32
+void      matrix3i_zero(Matrix3i* result);                                           // creates a zero matrix 3x3 of i32
+void      matrix3i_add(const Matrix3i* a, const Matrix3i* b, Matrix3i* result);      // add matrix b to matrix a
+void      matrix3i_subtract(const Matrix3i* a, const Matrix3i* b, Matrix3i* result); // subtract matrix b from matrix a
+void      matrix3i_scale(const Matrix3i* a, i32 s, Matrix3i* result);                // scale matrix a by scaler s
 void      matrix3i_multiply(const Matrix3i* a, const Matrix3i* b, Matrix3i* result); // result = a * b
 void      matrix3i_copy(const Matrix3i* a, Matrix3i* result);                        // copy matrix a
 void      matrix3i_print(const Matrix3i* a, FILE* stream);                           // print matrix a
@@ -358,11 +358,11 @@ void      matrix3i_print(const Matrix3i* a, FILE* stream);                      
 Matrix3f* matrix3f_make(const Arena* arena);                                         // creates an identity matrix 2x2 of i32
 Matrix3f* matrix3f_make_aligned(const Arena* arena, u64 alignment);                  // creates an identity matrix 2x2 of i32
 void      matrix3f_kill(const Arena* arena, Matrix3f* matrix);                       // creates an identity matrix 2x2 of i32
-void      matrix3f_identity(Matrix3f* matrix);                                       // creates an identity matrix 3x3 of f32
-void      matrix3f_zero(Matrix3f* matrix);                                           // creates a zero matrix 3x3 of f32
-void      matrix3f_add(Matrix3f* a, const Matrix3f* b);                              // add matrix b to matrix a
-void      matrix3f_subtract(Matrix3f* a, const Matrix3f* b);                         // subtract matrix b from matrix a
-void      matrix3f_scale(Matrix3f* a, f32 s);                                        // scale matrix a by scaler s
+void      matrix3f_identity(Matrix3f* result);                                       // creates an identity matrix 3x3 of f32
+void      matrix3f_zero(Matrix3f* result);                                           // creates a zero matrix 3x3 of f32
+void      matrix3f_add(const Matrix3f* a, const Matrix3f* b, Matrix3f* result);      // add matrix b to matrix a
+void      matrix3f_subtract(const Matrix3f* a, const Matrix3f* b, Matrix3f* result); // subtract matrix b from matrix a
+void      matrix3f_scale(const Matrix3f* a, f32 s, Matrix3f* result);                // scale matrix a by scaler s
 void      matrix3f_multiply(const Matrix3f* a, const Matrix3f* b, Matrix3f* result); // result = a * b
 void      matrix3f_copy(const Matrix3f* a, Matrix3f* result);                        // copy matrix a
 void      matrix3f_print(const Matrix3f* a, FILE* stream);                           // print matrix a
@@ -371,11 +371,11 @@ void      matrix3f_print(const Matrix3f* a, FILE* stream);                      
 Matrix4i* matrix4i_make(const Arena* arena);                                         // creates an identity matrix 2x2 of i32
 Matrix4i* matrix4i_make_aligned(const Arena* arena, u64 alignment);                  // creates an identity matrix 2x2 of i32
 void      matrix4i_kill(const Arena* arena, Matrix4i* matrix);                       // creates an identity matrix 2x2 of i32
-void      matrix4i_identity(Matrix4i* matrix);                                       // creates an identity matrix 4x4 of i32
-void      matrix4i_zero(Matrix4i* matrix);                                           // creates a zero matrix 4x4 of i32
-void      matrix4i_add(Matrix4i* a, const Matrix4i* b);                              // add matrix b to matrix a
-void      matrix4i_subtract(Matrix4i* a, const Matrix4i* b);                         // subtract matrix b from matrix a
-void      matrix4i_scale(Matrix4i* a, i32 s);                                        // scale matrix a by scaler s
+void      matrix4i_identity(Matrix4i* result);                                       // creates an identity matrix 4x4 of i32
+void      matrix4i_zero(Matrix4i* result);                                           // creates a zero matrix 4x4 of i32
+void      matrix4i_add(const Matrix4i* a, const Matrix4i* b, Matrix4i* result);      // add matrix b to matrix a
+void      matrix4i_subtract(const Matrix4i* a, const Matrix4i* b, Matrix4i* result); // subtract matrix b from matrix a
+void      matrix4i_scale(const Matrix4i* a, i32 s, Matrix4i* result);                // scale matrix a by scaler s
 void      matrix4i_multiply(const Matrix4i* a, const Matrix4i* b, Matrix4i* result); // result = a * b
 void      matrix4i_copy(const Matrix4i* a, Matrix4i* result);                        // copy matrix a
 void      matrix4i_print(const Matrix4i* a, FILE* stream);                           // print matrix a
@@ -384,18 +384,19 @@ void      matrix4i_print(const Matrix4i* a, FILE* stream);                      
 Matrix4f* matrix4f_make(const Arena* arena);                                         // creates an identity matrix 2x2 of i32
 Matrix4f* matrix4f_make_aligned(const Arena* arena, u64 alignment);                  // creates an identity matrix 2x2 of i32
 void      matrix4f_kill(const Arena* arena, Matrix4f* matrix);                       // creates an identity matrix 2x2 of i32
-void      matrix4f_identity(Matrix4f* matrix);                                       // creates an identity matrix 4x4 of f32
-void      matrix4f_zero(Matrix4f* matrix);                                           // creates a zero matrix 4x4 of f32
-void      matrix4f_add(Matrix4f* a, const Matrix4f* b);                              // add matrix b to matrix a
-void      matrix4f_subtract(Matrix4f* a, const Matrix4f* b);                         // subtract matrix b from matrix a
-void      matrix4f_scale(Matrix4f* a, f32 s);                                        // scale matrix a by scaler s
+void      matrix4f_identity(Matrix4f* result);                                       // creates an identity matrix 4x4 of f32
+void      matrix4f_zero(Matrix4f* result);                                           // creates a zero matrix 4x4 of f32
+void      matrix4f_add(const Matrix4f* a, const Matrix4f* b, Matrix4f* result);      // add matrix b to matrix a
+void      matrix4f_subtract(const Matrix4f* a, const Matrix4f* b, Matrix4f* result); // subtract matrix b from matrix a
+void      matrix4f_scale(const Matrix4f* a, f32 s, Matrix4f* result);                // scale matrix a by scaler s
 void      matrix4f_multiply(const Matrix4f* a, const Matrix4f* b, Matrix4f* result); // result = a * b
 void      matrix4f_copy(const Matrix4f* a, Matrix4f* result);                        // copy matrix a
 void      matrix4f_print(const Matrix4f* a, FILE* stream);                           // print matrix a
-void      matrix4f_perspective(Matrix4f* m, f32 fov, f32 aspect, f32 near, f32 far);
-void      matrix4f_orthographic(Matrix4f* m, f32 left, f32 right, f32 bottom, f32 top, f32 near, f32 far);
-void      matrix4f_translate(Matrix4f* m, f32 x, f32 y, f32 z);
-void      matrix4f_rotate(Matrix4f* m, f32 radian, Axis axis);
+
+void matrix4f_perspective(f32 fov, f32 aspect, f32 near, f32 far, Matrix4f* result);
+void matrix4f_orthographic(f32 left, f32 right, f32 bottom, f32 top, f32 near, f32 far, Matrix4f* result);
+void matrix4f_translate(const Matrix4f* m, f32 x, f32 y, f32 z, Matrix4f* result);
+void matrix4f_rotate(const Matrix4f* m, f32 radian, Axis axis, Matrix4f* result);
 
 //***** Matrix macros *****
 #define matrix_make_(arena, type)                                                                                                                    \
@@ -443,32 +444,32 @@ void      matrix4f_rotate(Matrix4f* m, f32 radian, Axis axis);
         Matrix4i *: matrix4i_zero,                                                                                                                   \
         Matrix4f *: matrix4f_zero)((matrix))
 
-#define matrix_add_(a, b)                                                                                                                            \
+#define matrix_add_(a, b, result)                                                                                                                    \
     _Generic((a),                                                                                                                                    \
         Matrix2i *: matrix2i_add,                                                                                                                    \
         Matrix2f *: matrix2f_add,                                                                                                                    \
         Matrix3i *: matrix3i_add,                                                                                                                    \
         Matrix3f *: matrix3f_add,                                                                                                                    \
         Matrix4i *: matrix4i_add,                                                                                                                    \
-        Matrix4f *: matrix4f_add)((a), (b))
+        Matrix4f *: matrix4f_add)((a), (b), (result))
 
-#define matrix_subtract_(a, b)                                                                                                                       \
+#define matrix_subtract_(a, b, result)                                                                                                               \
     _Generic((a),                                                                                                                                    \
         Matrix2i *: matrix2i_subtract,                                                                                                               \
         Matrix2f *: matrix2f_subtract,                                                                                                               \
         Matrix3i *: matrix3i_subtract,                                                                                                               \
         Matrix3f *: matrix3f_subtract,                                                                                                               \
         Matrix4i *: matrix4i_subtract,                                                                                                               \
-        Matrix4f *: matrix4f_subtract)((a), (b))
+        Matrix4f *: matrix4f_subtract)((a), (b), (result))
 
-#define matrix_scale_(a, s)                                                                                                                          \
+#define matrix_scale_(a, s, result)                                                                                                                  \
     _Generic((a),                                                                                                                                    \
         Matrix2i *: matrix2i_scale,                                                                                                                  \
         Matrix2f *: matrix2f_scale,                                                                                                                  \
         Matrix3i *: matrix3i_scale,                                                                                                                  \
         Matrix3f *: matrix3f_scale,                                                                                                                  \
         Matrix4i *: matrix4i_scale,                                                                                                                  \
-        Matrix4f *: matrix4f_scale)((a), (s))
+        Matrix4f *: matrix4f_scale)((a), (s), (result))
 
 #define matrix_multiply_(a, b, result)                                                                                                               \
     _Generic((a),                                                                                                                                    \
@@ -487,5 +488,23 @@ void      matrix4f_rotate(Matrix4f* m, f32 radian, Axis axis);
         Matrix3f *: matrix3f_copy,                                                                                                                   \
         Matrix4i *: matrix4i_copy,                                                                                                                   \
         Matrix4f *: matrix4f_copy)((a), (result))
+
+#define matrix_print_(a, stream)                                                                                                                     \
+    _Generic((a),                                                                                                                                    \
+        Matrix2i *: matrix2i_print,                                                                                                                  \
+        Matrix2f *: matrix2f_print,                                                                                                                  \
+        Matrix3i *: matrix3i_print,                                                                                                                  \
+        Matrix3f *: matrix3f_print,                                                                                                                  \
+        Matrix4i *: matrix4i_print,                                                                                                                  \
+        Matrix4f *: matrix4f_print)((a), (stream))
+
+#define matrix_perspective_(fov, aspect, near, far, result) matrix4f_perspective((fov), (aspect), (near), (far), (result))
+
+#define matrix_orthographic_(left, right, bottom, top, near, far, result)                                                                            \
+    matrix4f_orthographic((left), (right), (bottom), (top), (near), (far), (result))
+
+#define matrix_translate_(m, x, y, z, result) matrix4f_translate((m), (x), (y), (z), (result))
+
+#define matrix_rotate_(m, radian, axis, result) matrix4f_rotate((m), (radian), (axis), (result))
 
 #endif
