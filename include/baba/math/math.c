@@ -2,6 +2,15 @@
 
 #include <tgmath.h>
 
+const f32 PI           = 3.14159265358979323846f;
+const f32 E            = 2.71828182845904523536f;
+const f32 SQRT2        = 1.41421356237309504880f;
+const f32 SQRT3        = 1.73205080756887729352f;
+const f32 GOLDEN_RATIO = 1.61803398874989484820f;
+const f32 RADIAN       = PI / 180.0f;
+const f32 DEGREE       = 180.0f / PI;
+const f32 EPSILON      = 0.000001f;
+
 f32 exp_f(const f32 x) { return exp(x); }
 f64 exp_d(const f64 x) { return exp(x); }
 f32 exp2_f(const f32 x) { return exp2(x); }
