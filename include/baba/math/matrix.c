@@ -744,7 +744,9 @@ void matrix4f_print(const Matrix4f* a, FILE* stream)
 void matrix4f_perspective(Matrix4f* m, f32 fov, f32 aspect, f32 near, f32 far)
 {
     mem_set(m->v, 0, 16);
-    f32 f  = 1.0f / tan_(fov / 2);
+
+    const f32 f = 1.0f / tan_(fov / 2);
+
     m->x00 = f / aspect;
     m->x11 = f;
     m->x22 = (far + near) / (near - far);
@@ -755,6 +757,7 @@ void matrix4f_perspective(Matrix4f* m, f32 fov, f32 aspect, f32 near, f32 far)
 void matrix4f_orthographic(Matrix4f* m, f32 left, f32 right, f32 bottom, f32 top, f32 near, f32 far)
 {
     mem_set(m->mat, 0, 16);
+
     m->x00 = 2.0f / (right - left);
     m->x11 = 2.0f / (top - bottom);
     m->x22 = -2.0f / (far - near);
@@ -770,4 +773,37 @@ void matrix4f_translate(Matrix4f* m, f32 x, f32 y, f32 z)
     m->x03 = x;
     m->x13 = y;
     m->x23 = z;
+}
+
+void matrix4f_rotate(Matrix4f* m, f32 radian, Axis axis)
+{
+    mem_set(m->mat, 0, 16);
+    f32 cos_value = cosf(radian);
+    f32 sin_value = sinf(radian);
+    switch (axis) {
+    case AXIS_X:
+        m->x00 = 1.0f;
+        m->x11 = cos_value;
+        m->x12 = -sin_value;
+        m->x21 = sin_value;
+        m->x22 = cos_value;
+        break;
+    case AXIS_Y:
+        m->x00 = cos_value;
+        m->x02 = sin_value;
+        m->x11 = 1.0f;
+        m->x20 = -sin_value;
+        m->x22 = cos_value;
+        break;
+    case AXIS_Z:
+        m->x00 = cos_value;
+        m->x01 = -sin_value;
+        m->x10 = sin_value;
+        m->x11 = cos_value;
+        m->x22 = 1.0f;
+        break;
+    default:
+        assert(false && "invalid axis");
+        break;
+    }
 }

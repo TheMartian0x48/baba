@@ -5,59 +5,81 @@
 #include "../types.h"
 #include <stdio.h>
 
+//***** constants *****
+
+const f32 PI           = 3.14159265358979323846f;
+const f32 E            = 2.71828182845904523536f;
+const f32 SQRT2        = 1.41421356237309504880f;
+const f32 SQRT3        = 1.73205080756887729352f;
+const f32 GOLDEN_RATIO = 1.61803398874989484820f;
+const f32 RADIAN       = PI / 180.0f;
+const f32 DEGREE       = 180.0f / PI;
+const f32 EPSILON      = 0.000001f;
+
 //***** Basic *****
-f32 expf(const f32 x);
-f64 expd(const f64 x);
-f32 exp2f(const f32 x);
-f64 exp2d(const f64 x);
-f32 logf(const f32 x);
-f64 logd(const f64 x);
-f32 log10f(const f32 x);
-f64 log10d(const f64 x);
-f32 log2f(const f32 x);
-f64 log2d(const f64 x);
+f32 exp_f(const f32 x);
+f64 exp_d(const f64 x);
+f32 exp2_f(const f32 x);
+f64 exp2_d(const f64 x);
+f32 log_f(const f32 x);
+f64 log_d(const f64 x);
+f32 log10_f(const f32 x);
+f64 log10_d(const f64 x);
+f32 log2_f(const f32 x);
+f64 log2_d(const f64 x);
 
-#define exp_(x)   _Generic((x), f32: expf, f64: expd)((x))
-#define exp2_(x)  _Generic((x), f32: exp2f, f64: exp2d)((x))
-#define log_(x)   _Generic((x), f32: logf, f64: logd)((x))
-#define log10_(x) _Generic((x), f32: log10f, f64: log10d)((x))
-#define log2_(x)  _Generic((x), f32: log2f, f64: log2d)((x))
+#define exp_(x)   _Generic((x), f32: exp_f, f64: exp_d)((x))
+#define exp2_(x)  _Generic((x), f32: exp2_f, f64: exp2_d)((x))
+#define log_(x)   _Generic((x), f32: log_f, f64: log_d)((x))
+#define log10_(x) _Generic((x), f32: log10_f, f64: log10_d)((x))
+#define log2_(x)  _Generic((x), f32: log2_f, f64: log2_d)((x))
 
-f32 powf(const f32 base, const f32 exp);
-f64 powd(const f64 base, const f64 exp);
-f32 sqrtf(const f32 x);
-f64 sqrtd(const f64 x);
-f32 cbrtf(const f32 x);
-f64 cbrtd(const f64 x);
-f32 hypotf(const f32 x, const f32 y);
-f64 hypotd(const f64 x, const f64 y);
+f32 pow_f(const f32 base, const f32 exp);
+f64 pow_d(const f64 base, const f64 exp);
+f32 sqrt_f(const f32 x);
+f64 sqrt_d(const f64 x);
+f32 cbrt_f(const f32 x);
+f64 cbrt_d(const f64 x);
+f32 hypot_f(const f32 x, const f32 y);
+f64 hypot_d(const f64 x, const f64 y);
 
-#define pow_(base, exp) _Generic((base), f32: powf, f64: powd)((base), (exp))
-#define sqrt_(x)        _Generic((x), f32: sqrtf, f64: sqrtd)((x))
-#define cbrt_(x)        _Generic((x), f32: cbrtf, f64: cbrtd)((x))
-#define hypot_(x, y)    _Generic((x), f32: hypotf, f64: hypotd)((x), (y))
+#define pow_(base, exp) _Generic((base), f32: pow_f, f64: pow_d)((base), (exp))
+#define sqrt_(x)        _Generic((x), f32: sqrt_f, f64: sqrt_d)((x))
+#define cbrt_(x)        _Generic((x), f32: cbrt_f, f64: cbrt_d)((x))
+#define hypot_(x, y)    _Generic((x), f32: hypot_f, f64: hypot_d)((x), (y))
 
 //***** Trigonometry *****
+f32 angle_to_radian_f(const f32 angle);
+f32 radian_to_angle_f(const f32 radian);
+f64 angle_to_radian_d(const f64 angle);
+f64 radian_to_angle_d(const f64 radian);
+f32 sin_f(const f32 radian);
+f64 sin_d(const f64 radian);
+f32 cos_f(const f32 radian);
+f64 cos_d(const f64 radian);
+f32 tan_f(const f32 radian);
+f32 tan_d(const f64 radian);
+f32 arc_sin_f(const f32 radian);
+f64 arc_sin_d(const f64 radian);
+f32 arc_cos_f(const f32 radian);
+f64 arc_cos_d(const f64 radian);
+f32 arc_tan_f(const f32 radian);
+f32 arc_tan_d(const f64 radian);
 
-f32 sinf(const f32 rad);
-f64 sind(const f64 rad);
-f32 cosf(const f32 rad);
-f64 cosd(const f64 rad);
-f32 tanf(const f32 rad);
-f32 tand(const f64 rad);
-f32 arc_sinf(const f32 rad);
-f64 arc_sind(const f64 rad);
-f32 arc_cosf(const f32 rad);
-f64 arc_cosd(const f64 rad);
-f32 arc_tanf(const f32 rad);
-f32 arc_tand(const f64 rad);
+#define angle_to_radian_(angle)  _Generic((angle), f32: angle_to_radian_f, f64: angle_to_radian_d)((angle))
+#define radian_to_angle_(radian) _Generic((radian), f32: radian_to_angle_f, f64: radian_to_angle_d)((radian))
+#define sin_(radian)             _Generic((radian), f32: sin_f, f64: sin_d)((radian))
+#define cos_(radian)             _Generic((radian), f32: cos_f, f64: cos_d)((radian))
+#define tan_(radian)             _Generic((radian), f32: tan_f, f64: tan_d)((radian))
+#define arc_sin_(radian)         _Generic((radian), f32: arc_sin_f, f64: arc_sin_d)((radian))
+#define arc_cos_(radian)         _Generic((radian), f32: arc_cos_f, f64: arc_cos_d)((radian))
+#define arc_tan_(radian)         _Generic((radian), f32: arc_tan_f, f64: arc_tan_d)((radian))
 
-#define sin_(rad)     _Generic((rad), f32: sinf, f64: sind)((rad))
-#define cos_(rad)     _Generic((rad), f32: cosf, f64: cosd)((rad))
-#define tan_(rad)     _Generic((rad), f32: tanf, f64: tand)((rad))
-#define arc_sin_(rad) _Generic((rad), f32: arc_sinf, f64: arc_sind)((rad))
-#define arc_cos_(rad) _Generic((rad), f32: arc_cosf, f64: arc_cosd)((rad))
-#define arc_tan_(rad) _Generic((rad), f32: arc_tanf, f64: arc_tand)((rad))
+typedef enum {
+    AXIS_X = 0,
+    AXIS_Y,
+    AXIS_Z
+} Axis;
 
 //***** Complex Number *****
 
@@ -373,6 +395,7 @@ void      matrix4f_print(const Matrix4f* a, FILE* stream);                      
 void      matrix4f_perspective(Matrix4f* m, f32 fov, f32 aspect, f32 near, f32 far);
 void      matrix4f_orthographic(Matrix4f* m, f32 left, f32 right, f32 bottom, f32 top, f32 near, f32 far);
 void      matrix4f_translate(Matrix4f* m, f32 x, f32 y, f32 z);
+void      matrix4f_rotate(Matrix4f* m, f32 radian, Axis axis);
 
 //***** Matrix macros *****
 #define matrix_make_(arena, type)                                                                                                                    \
