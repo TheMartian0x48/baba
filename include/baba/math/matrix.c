@@ -709,22 +709,24 @@ inline void matrix4f_multiply(const Matrix4f* a, const Matrix4f* b, Matrix4f* re
     assert(a != nullptr && "matrix a cannot be null");
     assert(b != nullptr && "matrix b cannot be null");
     assert(result != nullptr && "matrix result cannot be null");
-    result->x00 = a->x00 * b->x00 + a->x01 * b->x10 + a->x02 * b->x20 + a->x03 * b->x30;
-    result->x01 = a->x00 * b->x01 + a->x01 * b->x11 + a->x02 * b->x21 + a->x03 * b->x31;
-    result->x02 = a->x00 * b->x02 + a->x01 * b->x12 + a->x02 * b->x22 + a->x03 * b->x32;
-    result->x03 = a->x00 * b->x03 + a->x01 * b->x13 + a->x02 * b->x23 + a->x03 * b->x33;
-    result->x10 = a->x10 * b->x00 + a->x11 * b->x10 + a->x12 * b->x20 + a->x13 * b->x30;
-    result->x11 = a->x10 * b->x01 + a->x11 * b->x11 + a->x12 * b->x21 + a->x13 * b->x31;
-    result->x12 = a->x10 * b->x02 + a->x11 * b->x12 + a->x12 * b->x22 + a->x13 * b->x32;
-    result->x13 = a->x10 * b->x03 + a->x11 * b->x13 + a->x12 * b->x23 + a->x13 * b->x33;
-    result->x20 = a->x20 * b->x00 + a->x21 * b->x10 + a->x22 * b->x20 + a->x23 * b->x30;
-    result->x21 = a->x20 * b->x01 + a->x21 * b->x11 + a->x22 * b->x21 + a->x23 * b->x31;
-    result->x22 = a->x20 * b->x02 + a->x21 * b->x12 + a->x22 * b->x22 + a->x23 * b->x32;
-    result->x23 = a->x20 * b->x03 + a->x21 * b->x13 + a->x22 * b->x23 + a->x23 * b->x33;
-    result->x30 = a->x30 * b->x00 + a->x31 * b->x10 + a->x32 * b->x20 + a->x33 * b->x30;
-    result->x31 = a->x30 * b->x01 + a->x31 * b->x11 + a->x32 * b->x21 + a->x33 * b->x31;
-    result->x32 = a->x30 * b->x02 + a->x31 * b->x12 + a->x32 * b->x22 + a->x33 * b->x32;
-    result->x33 = a->x30 * b->x03 + a->x31 * b->x13 + a->x32 * b->x23 + a->x33 * b->x33;
+    Matrix4i tmat;
+    tmat.x00 = a->x00 * b->x00 + a->x01 * b->x10 + a->x02 * b->x20 + a->x03 * b->x30;
+    tmat.x01 = a->x00 * b->x01 + a->x01 * b->x11 + a->x02 * b->x21 + a->x03 * b->x31;
+    tmat.x02 = a->x00 * b->x02 + a->x01 * b->x12 + a->x02 * b->x22 + a->x03 * b->x32;
+    tmat.x03 = a->x00 * b->x03 + a->x01 * b->x13 + a->x02 * b->x23 + a->x03 * b->x33;
+    tmat.x10 = a->x10 * b->x00 + a->x11 * b->x10 + a->x12 * b->x20 + a->x13 * b->x30;
+    tmat.x11 = a->x10 * b->x01 + a->x11 * b->x11 + a->x12 * b->x21 + a->x13 * b->x31;
+    tmat.x12 = a->x10 * b->x02 + a->x11 * b->x12 + a->x12 * b->x22 + a->x13 * b->x32;
+    tmat.x13 = a->x10 * b->x03 + a->x11 * b->x13 + a->x12 * b->x23 + a->x13 * b->x33;
+    tmat.x20 = a->x20 * b->x00 + a->x21 * b->x10 + a->x22 * b->x20 + a->x23 * b->x30;
+    tmat.x21 = a->x20 * b->x01 + a->x21 * b->x11 + a->x22 * b->x21 + a->x23 * b->x31;
+    tmat.x22 = a->x20 * b->x02 + a->x21 * b->x12 + a->x22 * b->x22 + a->x23 * b->x32;
+    tmat.x23 = a->x20 * b->x03 + a->x21 * b->x13 + a->x22 * b->x23 + a->x23 * b->x33;
+    tmat.x30 = a->x30 * b->x00 + a->x31 * b->x10 + a->x32 * b->x20 + a->x33 * b->x30;
+    tmat.x31 = a->x30 * b->x01 + a->x31 * b->x11 + a->x32 * b->x21 + a->x33 * b->x31;
+    tmat.x32 = a->x30 * b->x02 + a->x31 * b->x12 + a->x32 * b->x22 + a->x33 * b->x32;
+    tmat.x33 = a->x30 * b->x03 + a->x31 * b->x13 + a->x32 * b->x23 + a->x33 * b->x33;
+    mem_copy(result, &tmat, sizeof(Matrix4f));
 }
 
 inline void matrix4f_copy(const Matrix4f* a, Matrix4f* result)
