@@ -36,7 +36,7 @@ Arena* arena_make(ArenaType type, u64 capacity)
     return arena;
 }
 
-void kill(Arena* arena)
+void arena_kill(Arena* arena)
 {
     if (arena == nullptr) {
         return;

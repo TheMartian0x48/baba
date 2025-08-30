@@ -97,45 +97,47 @@ typedef struct {
 
 //********Generic Array
 
-#define ArrayHeaderCast(a)    ((ArrayHeader*)&(a))
-#define ArrayItemSize(a)      (sizeof(*(a).v))
-#define ArrayPointerCast(arr) (*((void**)&(arr).v))
-#define ArrayDataPointer(arr) ((void**)&(arr).v)
+#define array_header_cast_(a)    ((ArrayHeader*)&(a))
+#define array_item_size_(a)      (sizeof(*(a).v))
+#define array_pointer_cast_(arr) (*((void**)&(arr).v))
+#define array_data_pointer_(arr) ((void**)&(arr).v)
 
-#define ArraySize(a)      (((ArrayHeader*)&(a))->size)
-#define ArrayCapacity(a)  (((ArrayHeader*)&(a))->capacity)
-#define ArrayAlignment(a) (((ArrayHeader*)&(a))->alignment)
-#define ArrayArena(a)     (((ArrayHeader*)&(a))->arena)
+#define array_size_(a)      (((ArrayHeader*)&(a))->size)
+#define array_capacity_(a)  (((ArrayHeader*)&(a))->capacity)
+#define array_alignment_(a) (((ArrayHeader*)&(a))->alignment)
+#define array_arena_(a)     (((ArrayHeader*)&(a))->arena)
 
-#define ArrayMakeAligned(arena, array, capacity, alignment)                                                                                          \
-    (ArrayPointerCast((array)) =                                                                                                                     \
-            array_make_aligned((arena), ArrayHeaderCast((array)), ArrayDataPointer((array)), (capacity), ArrayItemSize((array)), (alignment)))
+#define array_make_aligned_(arena, array, capacity, alignment)                                                                                       \
+    (array_pointer_cast_((array)) = array_make_aligned(                                                                                              \
+         (arena), array_header_cast_((array)), array_data_pointer_((array)), (capacity), array_item_size_((array)), (alignment)))
 
-#define ArrayMake(arena, array, capacity)                                                                                                            \
-    (ArrayPointerCast((array)) = array_make((arena), ArrayHeaderCast((array)), ArrayDataPointer((array)), (capacity), ArrayItemSize((array))))
+#define array_make_(arena, array, capacity)                                                                                                          \
+    (array_pointer_cast_((array)) =                                                                                                                  \
+            array_make((arena), array_header_cast_((array)), array_data_pointer_((array)), (capacity), array_item_size_((array))))
 
-#define ArrayKill(arena, array) ((arena), array_kill(ArrayHeaderCast((array)), ArrayDataPointer((array))))
+#define array_kill_(arena, array) ((arena), array_kill(array_header_cast_((array)), array_data_pointer_((array))))
 
-#define ArrayAdd(array, element) (array_add(ArrayHeaderCast((array)), ArrayDataPointer((array)), (element), ArrayItemSize((array))))
+#define array_add_(array, element) (array_add(array_header_cast_((array)), array_data_pointer_((array)), (element), array_item_size_((array))))
 
-#define ArrayCanAdd(array) (array_can_add(ArrayHeaderCast((array))))
+#define array_can_add_(array) (array_can_add(array_header_cast_((array))))
 
-#define ArrayClear(array) (array_clear(ArrayHeaderCast((array)), ArrayDataPointer((array))))
+#define array_clear_(array) (array_clear(array_header_cast_((array)), array_data_pointer_((array))))
 
-#define ArrayInsert(array, element, index) (array_insert(ArrayHeaderCast((array)), ArrayDataPointer((array)), element, ArrayItemSize((arr)), index))
+#define array_insert_(array, element, index)                                                                                                         \
+    (array_insert(array_header_cast_((array)), array_data_pointer_((array)), element, array_item_size_((arr)), index))
 
-#define ArrayCanInsert(array) (array_can_insert(ArrayHeaderCast((array))))
+#define array_can_insert_(array) (array_can_insert(array_header_cast_((array))))
 
-#define ArrayRemove(array, index) (array_remove(ArrayHeaderCast((array)), ArrayDataPointer(array), ArrayItemSize((array)), index))
+#define array_remove_(array, index) (array_remove(array_header_cast_((array)), array_data_pointer_(array), array_item_size_((array)), index))
 
 //******** Primitive Array ********
 
-#define PArraySize(a)      (((ArrayHeader*)&(a))->size)
-#define PArrayCapacity(a)  (((ArrayHeader*)&(a))->capacity)
-#define PArrayAlignment(a) (((ArrayHeader*)&(a))->alignment)
-#define PArrayArena(a)     (((ArrayHeader*)&(a))->arena)
+#define parray_size_(a)      (((ArrayHeader*)&(a))->size)
+#define parray_capacity_(a)  (((ArrayHeader*)&(a))->capacity)
+#define parray_alignment_(a) (((ArrayHeader*)&(a))->alignment)
+#define parray_arena_(a)     (((ArrayHeader*)&(a))->arena)
 
-#define PArrayKill(array)                                                                                                                            \
+#define parray_kill_(array)                                                                                                                          \
     _Generic((array),                                                                                                                                \
         U8Array: u8_array_kill,                                                                                                                      \
         U16Array: u16_array_kill,                                                                                                                    \
@@ -152,7 +154,7 @@ typedef struct {
         F32Array: f32_array_kill,                                                                                                                    \
         F64Array: f64_array_kill)(&(array))
 
-#define PArrayAdd(array, element)                                                                                                                    \
+#define parray_add_(array, element)                                                                                                                  \
     _Generic((array),                                                                                                                                \
         U8Array: u8_array_add,                                                                                                                       \
         U16Array: u16_array_add,                                                                                                                     \
@@ -169,7 +171,7 @@ typedef struct {
         F32Array: f32_array_add,                                                                                                                     \
         F64Array: f64_array_add)(&(array), (element))
 
-#define PArrayCanAdd(array)                                                                                                                          \
+#define parray_can_add_(array)                                                                                                                       \
     _Generic((array),                                                                                                                                \
         U8Array: u8_array_can_add,                                                                                                                   \
         U16Array: u16_array_can_add,                                                                                                                 \
@@ -186,7 +188,7 @@ typedef struct {
         F32Array: f32_array_can_add,                                                                                                                 \
         F64Array: f64_array_can_add)(&(array))
 
-#define PArrayClear(array)                                                                                                                           \
+#define parray_clear_(array)                                                                                                                         \
     _Generic((array),                                                                                                                                \
         U8Array: u8_array_clear,                                                                                                                     \
         U16Array: u16_array_clear,                                                                                                                   \
@@ -203,7 +205,7 @@ typedef struct {
         F32Array: f32_array_clear,                                                                                                                   \
         F64Array: f64_array_clear)(&(array))
 
-#define PArrayInsert(array, element, index)                                                                                                          \
+#define parray_insert_(array, element, index)                                                                                                        \
     _Generic((array),                                                                                                                                \
         U8Array: u8_array_insert,                                                                                                                    \
         U16Array: u16_array_insert,                                                                                                                  \
@@ -220,7 +222,7 @@ typedef struct {
         F32Array: f32_array_insert,                                                                                                                  \
         F64Array: f64_array_insert)(&(array), (element), (index))
 
-#define PArrayCanInsert(array)                                                                                                                       \
+#define parray_can_insert_(array)                                                                                                                    \
     _Generic((array),                                                                                                                                \
         U8Array: u8_array_can_insert,                                                                                                                \
         U16Array: u16_array_can_insert,                                                                                                              \
@@ -237,7 +239,7 @@ typedef struct {
         F32Array: f32_array_can_insert,                                                                                                              \
         F64Array: f64_array_can_insert)(&(array))
 
-#define PArrayRemove(array, index)                                                                                                                   \
+#define parray_remove_(array, index)                                                                                                                 \
     _Generic((array),                                                                                                                                \
         U8Array: u8_array_remove,                                                                                                                    \
         U16Array: u16_array_remove,                                                                                                                  \
@@ -282,10 +284,10 @@ U16Array u16_array_make_aligned(Arena* arena, u64 capacity, u64 alignment);
 U16Array u16_array_make(Arena* arena, u64 capacity);
 void     u16_array_kill(Arena* arena, U16Array* array);
 void     u16_array_add(U16Array* array, u16 element);
-void     u16_array_can_add(U16Array* array);
+bool     u16_array_can_add(const U16Array* array);
 void     u16_array_clear(U16Array* array);
 void     u16_array_insert(U16Array* array, u16 element, u64 index);
-void     u16_array_can_insert(U16Array* array);
+bool     u16_array_can_insert(const U16Array* array);
 void     u16_array_remove(U16Array* array, u64 index);
 
 //***** U32Array *****
@@ -293,10 +295,10 @@ U32Array u32_array_make_aligned(Arena* arena, u64 capacity, u64 alignment);
 U32Array u32_array_make(Arena* arena, u64 capacity);
 void     u32_array_kill(Arena* arena, U32Array* array);
 void     u32_array_add(U32Array* array, u32 element);
-void     u32_array_can_add(U32Array* array);
+bool     u32_array_can_add(const U32Array* array);
 void     u32_array_clear(U32Array* array);
 void     u32_array_insert(U32Array* array, u32 element, u64 index);
-void     u32_array_can_insert(U32Array* array);
+bool     u32_array_can_insert(const U32Array* array);
 void     u32_array_remove(U32Array* array, u64 index);
 
 //***** U64Array *****
@@ -304,10 +306,10 @@ U64Array u64_array_make_aligned(Arena* arena, u64 capacity, u64 alignment);
 U64Array u64_array_make(Arena* arena, u64 capacity);
 void     u64_array_kill(Arena* arena, U64Array* array);
 void     u64_array_add(U64Array* array, u64 element);
-void     u64_array_can_add(U64Array* array);
+bool     u64_array_can_add(const U64Array* array);
 void     u64_array_clear(U64Array* array);
 void     u64_array_insert(U64Array* array, u64 element, u64 index);
-void     u64_array_can_insert(U64Array* array);
+bool     u64_array_can_insert(const U64Array* array);
 void     u64_array_remove(U64Array* array, u64 index);
 
 //***** I8Array *****
@@ -315,10 +317,10 @@ I8Array i8_array_make_aligned(Arena* arena, u64 capacity, u64 alignment);
 I8Array i8_array_make(Arena* arena, u64 capacity);
 void    i8_array_kill(Arena* arena, I8Array* array);
 void    i8_array_add(I8Array* array, i8 element);
-void    i8_array_can_add(I8Array* array);
+bool    i8_array_can_add(const I8Array* array);
 void    i8_array_clear(I8Array* array);
 void    i8_array_insert(I8Array* array, i8 element, u64 index);
-void    i8_array_can_insert(I8Array* array);
+bool    i8_array_can_insert(const I8Array* array);
 void    i8_array_remove(I8Array* array, u64 index);
 
 //***** I16Array *****
@@ -326,10 +328,10 @@ I16Array i16_array_make_aligned(Arena* arena, u64 capacity, u64 alignment);
 I16Array i16_array_make(Arena* arena, u64 capacity);
 void     i16_array_kill(Arena* arena, I16Array* array);
 void     i16_array_add(I16Array* array, i16 element);
-void     i16_array_can_add(I16Array* array);
+bool     i16_array_can_add(const I16Array* array);
 void     i16_array_clear(I16Array* array);
 void     i16_array_insert(I16Array* array, i16 element, u64 index);
-void     i16_array_can_insert(I16Array* array);
+bool     i16_array_can_insert(const I16Array* array);
 void     i16_array_remove(I16Array* array, u64 index);
 
 //***** I32Array *****
@@ -337,10 +339,10 @@ I32Array i32_array_make_aligned(Arena* arena, u64 capacity, u64 alignment);
 I32Array i32_array_make(Arena* arena, u64 capacity);
 void     i32_array_kill(Arena* arena, I32Array* array);
 void     i32_array_add(I32Array* array, i32 element);
-void     i32_array_can_add(I32Array* array);
+bool     i32_array_can_add(const I32Array* array);
 void     i32_array_clear(I32Array* array);
 void     i32_array_insert(I32Array* array, i32 element, u64 index);
-void     i32_array_can_insert(I32Array* array);
+bool     i32_array_can_insert(const I32Array* array);
 void     i32_array_remove(I32Array* array, u64 index);
 
 //***** I64Array *****
@@ -348,10 +350,10 @@ I64Array i64_array_make_aligned(Arena* arena, u64 capacity, u64 alignment);
 I64Array i64_array_make(Arena* arena, u64 capacity);
 void     i64_array_kill(Arena* arena, I64Array* array);
 void     i64_array_add(I64Array* array, i64 element);
-void     i64_array_can_add(I64Array* array);
+bool     i64_array_can_add(const I64Array* array);
 void     i64_array_clear(I64Array* array);
 void     i64_array_insert(I64Array* array, i64 element, u64 index);
-void     i64_array_can_insert(I64Array* array);
+bool     i64_array_can_insert(const I64Array* array);
 void     i64_array_remove(I64Array* array, u64 index);
 
 //***** B8Array *****
@@ -359,10 +361,10 @@ B8Array b8_array_make_aligned(Arena* arena, u64 capacity, u64 alignment);
 B8Array b8_array_make(Arena* arena, u64 capacity);
 void    b8_array_kill(Arena* arena, B8Array* array);
 void    b8_array_add(B8Array* array, b8 element);
-void    b8_array_can_add(B8Array* array);
+bool    b8_array_can_add(const B8Array* array);
 void    b8_array_clear(B8Array* array);
 void    b8_array_insert(B8Array* array, b8 element, u64 index);
-void    b8_array_can_insert(B8Array* array);
+bool    b8_array_can_insert(const B8Array* array);
 void    b8_array_remove(B8Array* array, u64 index);
 
 //***** B16Array *****
@@ -370,10 +372,10 @@ B16Array b16_array_make_aligned(Arena* arena, u64 capacity, u64 alignment);
 B16Array b16_array_make(Arena* arena, u64 capacity);
 void     b16_array_kill(Arena* arena, B16Array* array);
 void     b16_array_add(B16Array* array, b16 element);
-void     b16_array_can_add(B16Array* array);
+bool     b16_array_can_add(const B16Array* array);
 void     b16_array_clear(B16Array* array);
 void     b16_array_insert(B16Array* array, b16 element, u64 index);
-void     b16_array_can_insert(B16Array* array);
+bool     b16_array_can_insert(const B16Array* array);
 void     b16_array_remove(B16Array* array, u64 index);
 
 //***** B32Array *****
@@ -381,10 +383,10 @@ B32Array b32_array_make_aligned(Arena* arena, u64 capacity, u64 alignment);
 B32Array b32_array_make(Arena* arena, u64 capacity);
 void     b32_array_kill(Arena* arena, B32Array* array);
 void     b32_array_add(B32Array* array, b32 element);
-void     b32_array_can_add(B32Array* array);
+bool     b32_array_can_add(const B32Array* array);
 void     b32_array_clear(B32Array* array);
 void     b32_array_insert(B32Array* array, b32 element, u64 index);
-void     b32_array_can_insert(B32Array* array);
+bool     b32_array_can_insert(const B32Array* array);
 void     b32_array_remove(B32Array* array, u64 index);
 
 //***** B64Array *****
@@ -392,10 +394,10 @@ B64Array b64_array_make_aligned(Arena* arena, u64 capacity, u64 alignment);
 B64Array b64_array_make(Arena* arena, u64 capacity);
 void     b64_array_kill(Arena* arena, B64Array* array);
 void     b64_array_add(B64Array* array, b64 element);
-void     b64_array_can_add(B64Array* array);
+bool     b64_array_can_add(const B64Array* array);
 void     b64_array_clear(B64Array* array);
 void     b64_array_insert(B64Array* array, b64 element, u64 index);
-void     b64_array_can_insert(B64Array* array);
+bool     b64_array_can_insert(const B64Array* array);
 void     b64_array_remove(B64Array* array, u64 index);
 
 //***** F32Array *****
@@ -403,10 +405,10 @@ F32Array f32_array_make_aligned(Arena* arena, u64 capacity, u64 alignment);
 F32Array f32_array_make(Arena* arena, u64 capacity);
 void     f32_array_kill(Arena* arena, F32Array* array);
 void     f32_array_add(F32Array* array, f32 element);
-void     f32_array_can_add(F32Array* array);
+bool     f32_array_can_add(const F32Array* array);
 void     f32_array_clear(F32Array* array);
 void     f32_array_insert(F32Array* array, f32 element, u64 index);
-void     f32_array_can_insert(F32Array* array);
+bool     f32_array_can_insert(const F32Array* array);
 void     f32_array_remove(F32Array* array, u64 index);
 
 //***** F64Array *****
@@ -414,10 +416,10 @@ F64Array f64_array_make_aligned(Arena* arena, u64 capacity, u64 alignment);
 F64Array f64_array_make(Arena* arena, u64 capacity);
 void     f64_array_kill(Arena* arena, F64Array* array);
 void     f64_array_add(F64Array* array, f64 element);
-void     f64_array_can_add(F64Array* array);
+bool     f64_array_can_add(const F64Array* array);
 void     f64_array_clear(F64Array* array);
 void     f64_array_insert(F64Array* array, f64 element, u64 index);
-void     f64_array_can_insert(F64Array* array);
+bool     f64_array_can_insert(const F64Array* array);
 void     f64_array_remove(F64Array* array, u64 index);
 
 //***** StrBuf *****
