@@ -839,5 +839,6 @@ void matrix4f_rotate(const Matrix4f* m, f32 radian, Axis axis, Matrix4f* result)
         assert(false && "invalid axis");
         break;
     }
-    matrix4f_multiply(m, &rmat, result);
+    rmat.x33 = 1.0f;
+    matrix4f_multiply(&rmat, m, result);
 }
